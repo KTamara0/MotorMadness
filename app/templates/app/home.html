@@ -1,0 +1,22 @@
+{% extends "app/base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <video autoplay muted loop class="video-background">
+        <source src="{% static 'videos/motovideokraci.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="home_title">
+        <h1 class="title">MotorMadness</h1>
+
+         <!-- Slike ispod naslova -->
+         <div class="image-row">
+            <img src="{% static 'images/m1.jpg' %}" alt="First Image" class="image">
+            <img src="{% static 'images/m2.jpg' %}" alt="Second Image" class="image">
+            <img src="{% static 'images/m3.jpg' %}" alt="Third Image" class="image">
+        </div>
+    </div>
+
+{% endblock %}

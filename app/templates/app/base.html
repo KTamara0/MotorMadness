@@ -1,0 +1,61 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MotorMadness{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{% static 'app/motor.css' %}">
+
+    {% block extra_css %}
+    {% endblock %}
+</head>
+<body>
+    <nav>
+        <div class="left">
+            <!-- Prikaz trenutne stranice (klikabilno) -->
+            <span class="current-page" onclick="toggleMenu()">
+                {% if request.path == '/' %}
+                    Home
+                {% elif request.path == '/login/' %}
+                    Login
+                {% elif request.path == '/register/' %}
+                    Register
+                {% elif request.path == '/profile/' %}
+                    My Profile
+                {% else %}
+                    Current Page
+                {% endif %}
+            </span>
+            <div class="nav-options">
+                <!-- Provjera da li je korisnik prijavljen -->
+                {% if user.is_authenticated %}
+                    <a href="{% url 'app:profile' user_id=user.id %}" class="{% if request.path == '/profile/' %}active{% endif %}">My profile</a>
+                    <a href="{% url 'app:logout' %}" class="{% if request.path == '/logout/' %}active{% endif %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'app:login' %}" class="{% if request.path == '/login/' %}active{% endif %}">Login</a>
+                    <a href="{% url 'app:register' %}" class="{% if request.path == '/register/' %}active{% endif %}">Register</a>
+                {% endif %}
+                <a href="{% url 'app:home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+            </div>
+        </div>
+
+
+    </nav>
+
+    <!-- Glavni sadržaj stranice -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        // Funkcija za prikazivanje/sakrivanje padajućeg izbornika
+        function toggleMenu() {
+            const menu = document.querySelector('.nav-options');
+            menu.classList.toggle('active');  // Dodavanje/uklanjanje klase za vidljivost
+        }
+    </script>
+</body>
+</html>

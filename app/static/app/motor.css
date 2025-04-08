@@ -1,0 +1,187 @@
+/* Osnovni stil za navigaciju */
+nav {
+    display: flex;
+    justify-content: flex-end;  /* Razmak između stavki u navigaciji */
+    align-items: center;  /* Vertikalno centriranje */
+    padding: 15px 20px;  /* Razmak oko navigacije */
+    background-color: transparent;  /* Pozadina bez boje (prozirna) */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+/* Stil za tekst trenutne stranice */
+nav .current-page {
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Skriva meni po defaultu */
+nav .nav-options {
+    display: none;  /* Skriva navigaciju prema defaultu */
+    flex-direction: column;
+    gap: 5px;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 100%;
+    text-align: right;
+}
+
+/* Prikazuje meni kad se klikne na hamburger */
+nav .nav-options.active {
+    display: flex;
+}
+
+nav a {
+    text-decoration: none;
+    color: rgb(226, 210, 200);
+    font-size: 20px;
+    padding: 8px 8px;
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover{
+    color: rgb(255, 255, 255);
+}
+
+
+
+/* Responsivni dizajn za manje ekrane */
+@media (max-width: 768px) {
+    nav .nav-options {
+        display: none;  /* Skriva navigaciju za male ekrane */
+    }
+
+    .nav-options.active {
+        display: flex;  /* Prikazuje navigaciju kad je aktivno */
+    }
+
+    nav .current-page {
+        display: none;  /* Sakriva tekst kad se koristi hamburger */
+    }
+
+    nav a {
+        font-size: 20px;
+        padding: 15px;
+    }
+}
+
+
+
+/* Stilovi za video pozadinu */
+.video-background {
+    position: fixed; /* Video će biti fiksiran na pozadini */
+    top: 0;
+    left: 0;
+    width: 100%; /* Video će širiti širinu ekrana */
+    height: 100%; /* Video će širiti visinu ekrana */
+    object-fit: cover; /* Ovaj atribut čini da video pokriva cijeli ekran bez izobličenja */
+    z-index: -1; /* Video će biti pozadinski element, sadržaj će biti ispred njega */
+}
+
+/* Stilovi za home_title (prozirni div) */
+.home_title {
+    position: absolute;
+    top: 50%; /* Pomiče div u sredinu stranice (po visini) */
+    left: 50%; /* Pomiče div u sredinu stranice (po širini) */
+    transform: translate(-50%, -50%); /* Centriranje elementa sa pomakom */
+    background-color: rgba(0, 0, 0, 0.5); /* Poluprozirna crna pozadina */
+    padding: 20px;
+    border-radius: 10px; /* Zaobljeni rubovi div-a */
+    text-align: center; /* Centriranje teksta unutar div-a */
+}
+
+/* Stilovi za naslov */
+.title {
+    font-size: 4rem; /* Veći font za naslov */
+    color: rgb(233, 150, 87); /* Bijela boja za naslov */
+    margin: 0; /* Uklanja margine oko naslova */
+}
+
+/* Stilovi za red slika */
+.image-row {
+    display: flex; /* Postavlja slike u red */
+    justify-content: center; /* Centriranje slika unutar reda */
+    gap: 20px; /* Razmak između slika */
+    margin-top: 20px; /* Razmak između naslova i slika */
+}
+
+
+/* Stilovi za slike */
+.image {
+    width: 100px; /* Postavlja širinu slike */
+    height: 100px; /* Postavlja visinu slike */
+    object-fit: cover; /* Osigurava da slike ne deformiraju proporcije */
+    border-radius: 8px; /* Zaobljeni rubovi slika */
+    margin: 0 5px; /* Dodavanje razmaka između slika */
+    border: 5px solid #000; /* Crni obrub oko slika */
+    transition: all 0.3s ease-in-out; /* Glatke promjene prilikom hover efekta */
+}
+
+/* Hover efekt na slike */
+.image:hover {
+    filter: grayscale(0%); /* Boje se vraćaju na normalne prilikom hovera */
+    transform: scale(1.1); /* Povećanje slike pri hoveru */
+    border: 5px solid  rgb(233, 150, 87); /* Bijeli obrub na hoveru */
+}
+
+html, body {
+    height: 100%;  /* Postavlja visinu stranice na 100% */
+    margin: 0;  /* Uklanja sve margine */
+    padding: 0;  /* Uklanja sve paddinge */
+}
+
+
+/* Stil za login-container div koji sadrži naslov i formu */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;  /* Pokriva cijeli visoki ekran */
+    background-image: url("/static/images/log.jpg");
+    background-size: cover;  /* Slika će pokriti cijeli prostor */
+    background-position: center;  /* Slika će biti centrirana */
+    color: rgb(233, 150, 87);  /* Tekst će biti bijele boje */
+    text-align: center;  /* Naslov i forma bit će centrirani */
+}
+
+/* Stil za naslov */
+.login-container h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+/* Stil za formu */
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;  /* Maksimalna širina forme */
+    background-color: rgba(0, 0, 0, 0.5);  /* Poluprozirna pozadina forme */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Stil za dugme */
+.login-container button {
+    background-color: #824a0c;
+    color: rgb(233, 150, 87);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 80%;
+    font-size: 18px;
+}
+
+.login-container button:hover {
+    background-color: rgb(233, 150, 87);
+    color: #824a0c;
+}
