@@ -30,15 +30,27 @@
                 {% endif %}
             </span>
             <div class="nav-options">
+                <ul class="navlinks">
                 <!-- Provjera da li je korisnik prijavljen -->
-                {% if user.is_authenticated %}
-                    <a href="{% url 'app:profile' user_id=user.id %}" class="{% if request.path == '/profile/' %}active{% endif %}">My profile</a>
-                    <a href="{% url 'app:logout' %}" class="{% if request.path == '/logout/' %}active{% endif %}">Logout</a>
-                {% else %}
-                    <a href="{% url 'app:login' %}" class="{% if request.path == '/login/' %}active{% endif %}">Login</a>
-                    <a href="{% url 'app:register' %}" class="{% if request.path == '/register/' %}active{% endif %}">Register</a>
-                {% endif %}
-                <a href="{% url 'app:home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'app:profile' user_id=user.id %}" class="{% if request.path == '/profile/' %}active{% endif %}">My profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'app:logout' %}" class="{% if request.path == '/logout/' %}active{% endif %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'app:login' %}" class="{% if request.path == '/login/' %}active{% endif %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'app:register' %}" class="{% if request.path == '/register/' %}active{% endif %}">Register</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a href="{% url 'app:home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+                    </li>
+                </ul>
             </div>
         </div>
 

@@ -12,6 +12,7 @@ nav {
     z-index: 1000;
 }
 
+
 /* Stil za tekst trenutne stranice */
 nav .current-page {
     font-size: 20px;
@@ -31,17 +32,28 @@ nav .nav-options {
     text-align: right;
 }
 
+nav .navlinks {
+    list-style-type: none;
+} 
+
 /* Prikazuje meni kad se klikne na hamburger */
 nav .nav-options.active {
     display: flex;
 }
 
 nav a {
+    list-style-type: none;
+    display: inline-block;  /* Omogućuje da samo tekst bude klikabilan */
+    padding: 8px 8px;  /* Prostor oko teksta */
     text-decoration: none;
     color: rgb(226, 210, 200);
     font-size: 20px;
-    padding: 8px 8px;
     transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+nav a span {
+    cursor: pointer;  /* Pokazivač ruke kada se pređe preko teksta */
 }
 
 nav a:hover{
