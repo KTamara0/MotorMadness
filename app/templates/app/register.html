@@ -1,10 +1,16 @@
 {% extends "app/base.html" %}
 
 {% block content %}
-  <h2>Register</h2>
+<div class="register-container">
   <form method="post">
+    <h2>Register</h2>
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Register</button>
+    <p class="login-link">
+        You already have a profile?
+        <a href="{% url 'app:login' %}">Log in!</a>
+    </p>
   </form>
+</div>
 {% endblock %}

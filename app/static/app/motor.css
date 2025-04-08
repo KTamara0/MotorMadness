@@ -18,6 +18,11 @@ nav .current-page {
     font-size: 20px;
     color: white;
     cursor: pointer;
+    border: 2px solid rgba(0, 0, 0, 0.7); /* Prozirni crni okvir oko cijelog menija */
+    border-radius: 10px; /* Zaobljeni rubovi oko okvira */
+    padding: 8px 8px; /* Razmak unutar okvira */
+    background-color: rgba(0, 0, 0, 0.7);
+    width: max-content;
 }
 
 /* Skriva meni po defaultu */
@@ -29,7 +34,13 @@ nav .nav-options {
     top: 50px;
     right: 0;
     width: 100%;
-    text-align: right;
+    text-align: center;
+    font-size: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.7); /* Prozirni crni okvir oko cijelog menija */
+    border-radius: 10px; /* Zaobljeni rubovi oko okvira */
+    padding: 8px 8px; /* Razmak unutar okvira */
+    background-color: rgba(0, 0, 0, 0.7);
+    width: max-content;
 }
 
 nav .navlinks {
@@ -49,6 +60,7 @@ nav a {
     color: rgb(226, 210, 200);
     font-size: 20px;
     transition: background-color 0.3s ease;
+    margin-right: 15px;
     cursor: pointer;
 }
 
@@ -110,7 +122,7 @@ nav a:hover{
 /* Stilovi za naslov */
 .title {
     font-size: 4rem; /* Veći font za naslov */
-    color: rgb(233, 150, 87); /* Bijela boja za naslov */
+    color: rgb(233, 150, 87); 
     margin: 0; /* Uklanja margine oko naslova */
 }
 
@@ -139,6 +151,11 @@ nav a:hover{
     filter: grayscale(0%); /* Boje se vraćaju na normalne prilikom hovera */
     transform: scale(1.1); /* Povećanje slike pri hoveru */
     border: 5px solid  rgb(233, 150, 87); /* Bijeli obrub na hoveru */
+}
+
+.quote{
+    color: rgb(233, 150, 87);
+    font-size: 20px;
 }
 
 html, body {
@@ -195,5 +212,90 @@ html, body {
 
 .login-container button:hover {
     background-color: rgb(233, 150, 87);
+    color: #824a0c;
+}
+
+.register-link {
+    margin-top: 15px;
+    font-size: 16px;
+    color: white;
+    font-weight: bold;
+}
+
+.register-link a {
+    color: rgb(233, 150, 87);
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.register-link a:hover {
+    color: #824a0c;
+}
+
+
+/* Stil za login-container div koji sadrži naslov i formu */
+.register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;  /* Pokriva cijeli visoki ekran */
+    background-image: url("/static/images/log.jpg");
+    background-size: cover;  /* Slika će pokriti cijeli prostor */
+    background-position: center;  /* Slika će biti centrirana */
+    color: rgb(233, 150, 87);  /* Tekst će biti bijele boje */
+    text-align: center;  /* Naslov i forma bit će centrirani */
+}
+
+/* Stil za naslov */
+.register-container h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+/* Stil za formu */
+.register-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;  /* Maksimalna širina forme */
+    background-color: rgba(0, 0, 0, 0.5);  /* Poluprozirna pozadina forme */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Stil za dugme */
+.register-container button {
+    background-color: #824a0c;
+    color: rgb(233, 150, 87);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 80%;
+    font-size: 18px;
+}
+
+.register-container button:hover {
+    background-color: rgb(233, 150, 87);
+    color: #824a0c;
+}
+
+.login-link {
+    margin-top: 15px;
+    font-size: 16px;
+    color: white;
+    font-weight: bold;
+}
+
+.login-link a {
+    color: rgb(233, 150, 87);
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.login-link a:hover {
     color: #824a0c;
 }

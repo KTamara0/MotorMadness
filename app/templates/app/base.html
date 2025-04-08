@@ -23,8 +23,8 @@
                     Login
                 {% elif request.path == '/register/' %}
                     Register
-                {% elif request.path == '/profile/' %}
-                    My Profile
+                    {% elif request.path|slice:":9" == '/profile/' and user.is_authenticated %}
+                    {{ user.username }}'s Profile
                 {% else %}
                     Current Page
                 {% endif %}
