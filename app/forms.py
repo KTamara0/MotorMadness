@@ -20,6 +20,7 @@ class AuthenticationForm(forms.Form):
             self.user = user
         return cleaned_data
     
+
     
 class UserForm(UserCreationForm):
     email = forms.EmailField(max_length=50, required=True)
@@ -30,6 +31,11 @@ class UserForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ["email", "username", "phone_number", "location", "password1", "password2"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password1'].help_text = None
+        self.fields['password2'].help_text = None
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
