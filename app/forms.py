@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
-from app.models import CustomUser
+from app.models import CustomUser, Motor
 
 class AuthenticationForm(forms.Form):
     username = forms.CharField(max_length=250)
@@ -60,3 +60,11 @@ class AccountForm(ModelForm):
     class Meta:
         model = CustomUser
         fields = ["email", "username", "phone_number", "location"]
+
+class AdvertisementForm(ModelForm):
+    class Meta:
+        model = Motor
+        fields = ['name', 'brand', 'model', 'description', 'price', 'made_at', 'milage', 'condition', 'image']
+        widgets = {
+            'condition': forms.Select(choices=Motor.VEHICLE_CONDITION)
+        }

@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth import logout, login as auth_login, authenticate
-from .forms import AuthenticationForm, UserForm, AccountForm
+from .forms import AuthenticationForm, UserForm, AccountForm, AdvertisementForm
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser
+from .models import CustomUser, Motor
 
 # Create your views here.
 def home(request):
@@ -48,3 +48,22 @@ def profile(request, user_id):
 def logout_view(request):
     logout(request)
     return redirect('app:home')
+
+
+@login_required
+def add_advertisement(request):
+
+    vehicle_condition = Motor.VEHICLE_CONDITION
+
+    if request.method == 'POST':
+        form = AdvertisementForm(request.POST, request.FILES)
+        if form.is_valid():
+            advertisement = form.save(commit=False)
+            advertisement.user = request.user.id
+            advertisement.save()
+
+            return redirect('app:profile', user_id = advertisement.user.id)
+    else:
+        form = AdvertisementForm
+    return render(request, 'app/add_advertisement.html', {"form" : form})
+
