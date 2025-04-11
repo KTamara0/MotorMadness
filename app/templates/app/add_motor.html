@@ -1,0 +1,15 @@
+{% extends "app/base.html" %}
+
+{% block title %}Add motor{% endblock %}
+
+{% block content %}
+    <div class="addmotor">
+        <h1>Add a New Vehicle</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add Vehicle</button>
+        </form>
+        <p><a href="{% url 'app:add_advertisement' %}">Back to Create Advertisement</a></p>
+    </div>
+{% endblock %}

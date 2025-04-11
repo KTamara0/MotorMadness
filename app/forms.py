@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
-from app.models import CustomUser, Motor
+from app.models import CustomUser, Motor, Advertisement
 
 class AuthenticationForm(forms.Form):
     username = forms.CharField(max_length=250)
@@ -63,8 +63,50 @@ class AccountForm(ModelForm):
 
 class AdvertisementForm(ModelForm):
     class Meta:
-        model = Motor
-        fields = ['name', 'brand', 'model', 'description', 'price', 'made_at', 'milage', 'condition', 'image']
+        model = Advertisement
+        fields = ['motor', 'title', 'description']
         widgets = {
-            'condition': forms.Select(choices=Motor.VEHICLE_CONDITION)
+            'motor': forms.Select(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter advertisement title'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Describe the vehicle or sale terms'}),
         }
+        labels = {
+            'motor': 'Vehicle',
+            'title': 'Advertisement Title',
+            'description': 'Description',
+        }
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user:
+            # Include user=None motors during migration transition
+            self.fields['motor'].queryset = Motor.objects.filter(user__in=[user, None])
+        
+
+class MotorForm(ModelForm):
+    class Meta:
+        model = Motor
+        fields = ['name', 'brand', 'model', 'description', 'price', 'made_at', 'mileage', 'condition', 'image']
+        widgets = {
+            'condition': forms.Select(choices=Motor.VEHICLE_CONDITION, attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., My Red Honda'}),
+            'brand': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., Honda'}),
+            'model': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., Civic'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Describe the vehicle'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 15000.00'}),
+            'made_at': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 2015'}),
+            'mileage': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 50000'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'name': 'Vehicle Name',
+            'brand': 'Brand',
+            'model': 'Model',
+            'description': 'Description',
+            'price': 'Price (USD)',
+            'made_at': 'Year Manufactured',
+            'mileage': 'Mileage',
+            'condition': 'Condition',
+            'image': 'Vehicle Image',
+        }
+    

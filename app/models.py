@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
 
 # Create your models here.
 
@@ -26,15 +28,40 @@ class Motor(models.Model):
         ('not working', 'Not working')
     ]
 
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True, related_name='motors')
     name = models.CharField(max_length=100)
     brand = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
-    description = models.CharField(max_length=300)
-    price = models.IntegerField()
-    made_at = models.IntegerField()
-    milage = models.IntegerField()
-    condition = models.CharField(max_length=50, choices=VEHICLE_CONDITION, default='new', blank=True, null=True)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
+    made_at = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1900), MaxValueValidator(timezone.now().year)]
+    )
+    mileage = models.PositiveIntegerField()
+    condition = models.CharField(max_length=30, choices=VEHICLE_CONDITION, default='new', blank=True, null=True)
     image = models.ImageField(null=True, blank=True, upload_to="motorimages/")
 
     def __str__(self):
-        return f' {self.year} {self.make} {self.model}'
+        return f"{self.brand} {self.model} ({self.name})"
+
+    class Meta:
+        ordering = ['brand', 'model']
+        verbose_name = 'Motor'
+        verbose_name_plural = 'Motors'
+
+class Advertisement(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='advertisements')
+    motor = models.ForeignKey(Motor, on_delete=models.CASCADE, related_name='advertisements')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    title = models.CharField(max_length=200, blank=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.title or 'Advertisement'} by {self.user.username} for {self.motor}"
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Advertisement'
+        verbose_name_plural = 'Advertisements'

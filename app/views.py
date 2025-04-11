@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth import logout, login as auth_login, authenticate
-from .forms import AuthenticationForm, UserForm, AccountForm, AdvertisementForm
+from .forms import AuthenticationForm, UserForm, AccountForm, AdvertisementForm, MotorForm
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser, Motor
+from .models import CustomUser, Motor, Advertisement
+from django.http import HttpResponse
 
 # Create your views here.
 def home(request):
@@ -42,8 +43,12 @@ def register(request):
     return render(request, 'app/register.html', {"form" : form})
 
 def profile(request, user_id):
-    user = CustomUser.objects.get(id=user_id)
-    return render(request, 'app/profile.html', {'user': user})
+    user = get_object_or_404(CustomUser, id=user_id)
+    advertisements = Advertisement.objects.filter(user=request.user)
+    return render(request, 'app/profile.html', {
+        'user': request.user,
+        'advertisements': advertisements
+    })
 
 def logout_view(request):
     logout(request)
@@ -53,17 +58,40 @@ def logout_view(request):
 @login_required
 def add_advertisement(request):
 
-    vehicle_condition = Motor.VEHICLE_CONDITION
-
     if request.method == 'POST':
-        form = AdvertisementForm(request.POST, request.FILES)
+        form = AdvertisementForm(request.POST, user=request.user)
         if form.is_valid():
             advertisement = form.save(commit=False)
-            advertisement.user = request.user.id
+            motor = form.cleaned_data['motor']
+            # Assign user to motor if None
+            if motor.user is None:
+                motor.user = request.user
+                motor.save()
+            # Verify ownership
+            elif motor.user != request.user:
+                return HttpResponse("You can only advertise your own motors.", status=403)
+            advertisement.user = request.user
             advertisement.save()
-
-            return redirect('app:profile', user_id = advertisement.user.id)
+            return redirect('app:profile', user_id=request.user.id)
+        else:
+            return render(request, 'app/add_advertisement.html', {'form': form})
     else:
-        form = AdvertisementForm
-    return render(request, 'app/add_advertisement.html', {"form" : form})
+        form = AdvertisementForm(user=request.user)
+        return render(request, 'app/add_advertisement.html', {'form': form})
 
+
+@login_required
+def add_motor(request):
+
+    if request.method == 'POST':
+        form = MotorForm(request.POST, request.FILES)
+        if form.is_valid():
+            motor = form.save(commit=False)
+            motor.user = request.user
+            motor.save()
+            return redirect('app:add_advertisement')
+        else:
+            return render(request, 'app/add_motor.html', {'form': form})
+    else:
+        form = MotorForm()
+        return render(request, 'app/add_motor.html', {'form': form})

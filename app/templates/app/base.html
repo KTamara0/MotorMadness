@@ -26,7 +26,7 @@
                     {% elif request.path|slice:":9" == '/profile/' and user.is_authenticated %}
                     {{ user.username }}'s Profile
                 {% elif request.path == '/add/' %}
-                    Add advertisement
+                    Add an advertisement
                 {% else %}
                     Current Page
                 {% endif %}
@@ -42,7 +42,7 @@
                             <a href="{% url 'app:logout' %}" class="{% if request.path == '/logout/' %}active{% endif %}">Logout</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{% url 'app:add_advertisement' %}" class="{% if request.path == '/add/' %}active{% endif %}">Add advertisement</a>
+                            <a href="{% url 'app:add_advertisement' %}" class="{% if request.path == '/add/' %}active{% endif %}">Add an advertisement</a>
                         </li>
                     {% else %}
                         <li class="nav-item">

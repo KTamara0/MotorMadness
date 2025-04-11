@@ -4,14 +4,13 @@
 
 {% block content %}
     <div class="addadvertisement">
-        <h1>Add new motor</h1>
+        <h1>Add a new ad</h1>
         {% if submitted %}
             Your advertisement was submitted successfully!
         {% else %}
 
             <form action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-
                 {{ form.as_p }}
 
                 <input type="submit" value="Submit" class="btn btn-secondary">

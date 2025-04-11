@@ -1,0 +1,13 @@
+
+{% extends "app/base.html" %}
+
+{% block title %}No motors{% endblock %}
+
+{% block content %}
+
+    <h1>No Vehicles Available</h1>
+
+    <p>{{ message }}</p>
+    <p><a href="{% url 'app:add_motor' %}">Click here to add a vehicle</a></p>
+
+{% endblock %}

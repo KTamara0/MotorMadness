@@ -1,9 +1,18 @@
 {% extends "app/base.html" %}
 
-{% block title %}{{ user.username }}'s profile{% endblock %}
+{% block title %}{{ user.username }}'s Profile{% endblock %}
 
 {% block content %}
   <h2>Welcome, {{ user.username }}!</h2>
   <p>This is your profile page.</p>
-  <a href="{% url 'app:add_advertisement' %}">Add new advertisement</a>
+  <a href="{% url 'app:add_advertisement' %}">Add a new advertisement</a>
+  <a href="{% url 'app:add_motor' %}">Add a new motor</a>
+  <h2>Your Ads</h2>
+    <ul>
+        {% for ad in advertisements %}
+            <li>{{ ad.motor.name }} - {{ ad.motor.price }} USD ({{ ad.title }})</li>
+        {% empty %}
+            <p>No advertisements found.</p>
+        {% endfor %}
+    </ul>
 {% endblock %}
