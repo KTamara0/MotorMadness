@@ -13,54 +13,24 @@
     {% endblock %}
 </head>
 <body>
-    <nav>
-        <div class="left">
-            <!-- Prikaz trenutne stranice (klikabilno) -->
-            <span class="current-page" onclick="toggleMenu()">
-                {% if request.path == '/' %}
-                    Home
-                {% elif request.path == '/login/' %}
-                    Login
-                {% elif request.path == '/register/' %}
-                    Register
-                    {% elif request.path|slice:":9" == '/profile/' and user.is_authenticated %}
-                    {{ user.username }}'s Profile
-                {% elif request.path == '/add/' %}
-                    Add an advertisement
+    <nav class="navbar">
+        <div class="navbar-container">
+            <ul class="navlinks">
+                <li><a href="{% url 'app:home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
+    
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'app:profile' user_id=user.id %}" class="{% if request.path == '/profile/' %}active{% endif %}">My profile</a></li>
+                    <li><a href="{% url 'app:add_advertisement' %}" class="{% if request.path == '/add/' %}active{% endif %}">Add an advertisement</a></li>
+                    <li><a href="{% url 'app:logout' %}" class="{% if request.path == '/logout/' %}active{% endif %}">Logout</a></li>
                 {% else %}
-                    Current Page
+                    <li><a href="{% url 'app:login' %}" class="{% if request.path == '/login/' %}active{% endif %}">Login</a></li>
+                    <li><a href="{% url 'app:register' %}" class="{% if request.path == '/register/' %}active{% endif %}">Register</a></li>
                 {% endif %}
-            </span>
-            <div class="nav-options">
-                <ul class="navlinks">
-                <!-- Provjera da li je korisnik prijavljen -->
-                    {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <a href="{% url 'app:profile' user_id=user.id %}" class="{% if request.path == '/profile/' %}active{% endif %}">My profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'app:logout' %}" class="{% if request.path == '/logout/' %}active{% endif %}">Logout</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'app:add_advertisement' %}" class="{% if request.path == '/add/' %}active{% endif %}">Add an advertisement</a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a href="{% url 'app:login' %}" class="{% if request.path == '/login/' %}active{% endif %}">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'app:register' %}" class="{% if request.path == '/register/' %}active{% endif %}">Register</a>
-                        </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a href="{% url 'app:home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-                    </li>
-                </ul>
-            </div>
+            </ul>
         </div>
-
-
     </nav>
+    
+    
 
     <!-- Glavni sadržaj stranice -->
     <div class="container">
