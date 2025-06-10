@@ -2,8 +2,10 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth import logout, login as auth_login, authenticate
 from .forms import AuthenticationForm, UserForm, AccountForm, AdvertisementForm, MotorForm
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser, Motor, Advertisement
-from django.http import HttpResponse
+from .models import CustomUser, Motor, Advertisement, FavoriteAdvertisement
+from django.http import HttpResponse, JsonResponse
+from django.db.models import Q
+
 
 # Create your views here.
 def home(request):
@@ -85,13 +87,111 @@ def add_motor(request):
 
     if request.method == 'POST':
         form = MotorForm(request.POST, request.FILES)
+        print("POST request, form is valid:", form.is_valid())
         if form.is_valid():
             motor = form.save(commit=False)
             motor.user = request.user
             motor.save()
             return redirect('app:add_advertisement')
         else:
+            print("Form errors:", form.errors)
             return render(request, 'app/add_motor.html', {'form': form})
     else:
         form = MotorForm()
+        print("GET request, rendering form")
         return render(request, 'app/add_motor.html', {'form': form})
+    
+
+def all_advertisements(request):
+    ads = Advertisement.objects.filter(is_active=True)
+
+    # Filteri iz GET parametara
+    brand = request.GET.get('brand')
+    model = request.GET.get('model')
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    min_year = request.GET.get('min_year')
+    max_year = request.GET.get('max_year')
+    min_mileage = request.GET.get('min_mileage')
+    max_mileage = request.GET.get('max_mileage')
+    condition = request.GET.get('condition')
+
+    if brand:
+        ads = ads.filter(motor__brand__icontains=brand)
+    if model:
+        ads = ads.filter(motor__model__icontains=model)
+    if min_price:
+        ads = ads.filter(motor__price__gte=min_price)
+    if max_price:
+        ads = ads.filter(motor__price__lte=max_price)
+    if min_year:
+        ads = ads.filter(motor__made_at__gte=min_year)
+    if max_year:
+        ads = ads.filter(motor__made_at__lte=max_year)
+    if min_mileage:
+        ads = ads.filter(motor__mileage__gte=min_mileage)
+    if max_mileage:
+        ads = ads.filter(motor__mileage__lte=max_mileage)
+    if condition:
+        ads = ads.filter(motor__condition=condition)
+
+    favorites = []
+    if request.user.is_authenticated:
+        favorites = request.user.favorite_ads.values_list('advertisement_id', flat=True)
+
+    return render(request, 'app/all_ads.html', {
+        'ads': ads,
+        'favorites': favorites,
+        'request' : request,
+    })
+
+
+@login_required
+def toggle_favorite(request, ad_id):
+    ad = get_object_or_404(Advertisement, id=ad_id)
+    favorite, created = FavoriteAdvertisement.objects.get_or_create(user=request.user, advertisement=ad)
+    if not created:
+        favorite.delete()
+        return JsonResponse({'status': 'removed'})
+    return JsonResponse({'status': 'added'})
+
+@login_required
+def favorite_ads_view(request):
+    favorites = Advertisement.objects.filter(favorited_by__user=request.user)
+    return render(request, 'app/favorites.html', {'favorites': favorites})
+
+@login_required
+def my_ads(request):
+    ads = Advertisement.objects.filter(user=request.user)
+    return render(request, 'app/my_ads.html', {'ads': ads})
+
+@login_required
+def ad_detail(request, ad_id):
+    ad = get_object_or_404(Advertisement, id=ad_id)
+    motor = ad.motor  # Dohvati povezani motor
+    return render(request, 'app/ad_detail.html', {'ad': ad, 'motor': motor})
+
+@login_required
+def edit_ad(request, ad_id):
+    ad = get_object_or_404(Advertisement, id=ad_id, user=request.user)
+
+    if request.method == 'POST':
+        form = AdvertisementForm(request.POST, request.FILES, instance=ad)
+        if form.is_valid():
+            form.save()
+            return redirect('app:my_ads')
+    else:
+        form = AdvertisementForm(instance=ad)
+
+    return render(request, 'app/edit_ad.html', {'form': form, 'ad': ad})
+
+
+@login_required
+def delete_ad(request, ad_id):
+    ad = get_object_or_404(Advertisement, id=ad_id, user=request.user)
+
+    if request.method == 'POST':
+        ad.delete()
+        return redirect('app:my_ads')
+
+    return render(request, 'app/confirm_delete.html', {'ad': ad})

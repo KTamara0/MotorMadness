@@ -1,0 +1,42 @@
+{% extends "app/base.html" %}
+
+{% load static %}
+
+{% block title %}All Ads{% endblock %}
+
+{% block content %}
+    <h2>All Motorcycle Ads</h2>
+
+<form method="GET" class="filter-form">
+    <input type="text" name="brand" placeholder="Brand" value="{{ request.GET.brand }}">
+    <input type="text" name="model" placeholder="Model" value="{{ request.GET.model }}">
+    <input type="number" name="min_price" placeholder="Min Price (€)" value="{{ request.GET.min_price }}">
+    <input type="number" name="max_price" placeholder="Max Price (€)" value="{{ request.GET.max_price }}">
+    <input type="number" name="min_year" placeholder="Min Year" value="{{ request.GET.min_year }}">
+    <input type="number" name="max_year" placeholder="Max Year" value="{{ request.GET.max_year }}">
+    <input type="number" name="min_mileage" placeholder="Min Mileage (km)" value="{{ request.GET.min_mileage }}">
+    <input type="number" name="max_mileage" placeholder="Max Mileage (km)" value="{{ request.GET.max_mileage }}">
+    <select name="condition">
+        <option value="" {% if not request.GET.condition %}selected{% endif %}>Any Condition</option>
+        <option value="new" {% if request.GET.condition == 'new' %}selected{% endif %}>New</option>
+        <option value="excellent" {% if request.GET.condition == 'excellent' %}selected{% endif %}>Excellent</option>
+        <option value="very good" {% if request.GET.condition == 'very good' %}selected{% endif %}>Very good</option>
+        <option value="good" {% if request.GET.condition == 'good' %}selected{% endif %}>Good</option>
+        <option value="smaller investments required" {% if request.GET.condition == 'smaller investments required' %}selected{% endif %}>Smaller investments required</option>
+        <option value="not working" {% if request.GET.condition == 'not working' %}selected{% endif %}>Not working</option>
+    </select>
+    <button type="submit">Search</button>
+</form>
+    <ul>
+        {% for ad in ads %}
+            <li>
+                <a href="{% url 'app:ad_detail' ad.id %}">{{ ad.title }}</a>
+                - {{ ad.motor.price }} €
+                - {{ ad.motor.brand }}
+                - {{ ad.motor.model }}
+            </li>
+        {% empty %}
+            <p>No ads found.</p>
+        {% endfor %}
+    </ul>
+{% endblock %}

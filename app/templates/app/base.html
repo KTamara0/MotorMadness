@@ -17,7 +17,7 @@
         <div class="navbar-container">
             <ul class="navlinks">
                 <li><a href="{% url 'app:home' %}" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
-    
+                <li><a href="{% url 'app:all_ads' %}">All Ads</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'app:profile' user_id=user.id %}" class="{% if request.path == '/profile/' %}active{% endif %}">My profile</a></li>
                     <li><a href="{% url 'app:add_advertisement' %}" class="{% if request.path == '/add/' %}active{% endif %}">Add an advertisement</a></li>
@@ -36,6 +36,14 @@
     <div class="container">
         {% block content %}{% endblock %}
     </div>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <script>
         // Funkcija za prikazivanje/sakrivanje padajućeg izbornika

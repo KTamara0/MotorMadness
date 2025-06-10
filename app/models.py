@@ -65,3 +65,10 @@ class Advertisement(models.Model):
         ordering = ['-created_at']
         verbose_name = 'Advertisement'
         verbose_name_plural = 'Advertisements'
+
+class FavoriteAdvertisement(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='favorite_ads')
+    advertisement = models.ForeignKey(Advertisement, on_delete=models.CASCADE, related_name='favorited_by')
+
+    class Meta:
+        unique_together = ('user', 'advertisement')

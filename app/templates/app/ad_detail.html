@@ -1,0 +1,36 @@
+{% extends "app/base.html" %}
+
+{% block title %}{{ ad.title }}{% endblock %}
+
+{% block content %}
+<div class="ad-details">
+    <h2>{{ ad.title }}</h2>
+    <p><strong>Brand:</strong> {{ ad.motor.brand }}</p>
+    <p><strong>Model:</strong> {{ ad.motor.model }}</p>
+    <p><strong>Price:</strong> {{ ad.motor.price }} €</p>
+    <p><strong>Year:</strong> {{ ad.motor.made_at }}</p>
+    <p><strong>Mileage:</strong> {{ ad.motor.mileage }} km</p>
+    <p><strong>Condition:</strong> {{ ad.motor.condition }} </p>
+    <p><strong>Description:</strong> {{ ad.motor.description }}</p>
+
+    {% if ad.motor.image %}
+        <img src="{{ ad.motor.image.url }}" alt="Image of {{ ad.title }}">
+    {% endif %}
+</div>
+
+{% if user.is_authenticated %}
+    {% if ad in user.favorite_ads.all %}
+        <p class="favorite-msg">This ad is in your favorites.</p>
+    {% else %}
+        <form method="POST" action="{% url 'app:toggle_favorite' ad.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-favorite">Add to Favorites</button>
+        </form>
+    {% endif %}
+{% endif %}
+
+{% if not user.is_authenticated %}
+    <p><a href="{% url 'login' %}">Log in</a> to add this ad to your favorites.</p>
+{% endif %}
+
+{% endblock %}

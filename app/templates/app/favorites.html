@@ -1,0 +1,20 @@
+{% extends "app/base.html" %}
+
+{% load static %}
+
+{% block title %}My Favorites{% endblock %}
+
+{% block content %}
+    <h2>Favorite Advertisements</h2>
+    {% if favorites %}
+        <ul>
+            {% for ad in favorites %}
+                <li>
+                    <a href="{% url 'app:ad_detail' ad.id %}">{{ ad.title }}</a> - {{ ad.motor.price }} €
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no favorite ads.</p>
+    {% endif %}
+{% endblock %}
