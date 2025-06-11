@@ -5,8 +5,19 @@
 {% block content %}
   <h2>Welcome, {{ user.username }}!</h2>
   <p>This is your profile page.</p>
-  <a href="{% url 'app:add_advertisement' %}">Add a new advertisement</a>
-  <a href="{% url 'app:add_motor' %}">Add a new motor</a>
+  <p>Your personal information:</p>
+  <p><strong>Email:</strong> {{ user.email }} </p>
+  <p><strong>Phone number:</strong> {{ user.phone_number }} </p>
+  <p><strong>Location:</strong> {{ user.location }} </p>
+
+  
+    <!-- Gumb za uređivanje profila -->
+    <a href="{% url 'app:edit_profile' %}" class="btn btn-primary">Edit Profile</a><br>
+    <a href="{% url 'app:password_change' %}" class="btn btn-danger">Change Password</a><br>
+    <br>
+
+  <a href="{% url 'app:add_advertisement' %}">Add a new advertisement</a><br>
+  <a href="{% url 'app:add_motor' %}">Add a new motor</a><br>
   <a href="{% url 'app:my_ads' %}">My Advertisements</a><br>
   <a href="{% url 'app:favorites' %}">My Favorite Ads</a>
   <h2>Your Ads</h2>

@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
+from .views import MyPasswordChangeView, MyPasswordChangeDoneView
 
 app_name = "app"
 
@@ -18,5 +20,7 @@ urlpatterns = [
     path('ads/<int:ad_id>/', views.ad_detail, name='ad_detail'),
     path('ads/edit/<int:ad_id>/', views.edit_ad, name='edit_ad'),
     path('ads/delete/<int:ad_id>/', views.delete_ad, name='delete_ad'),
-
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('password_change/', MyPasswordChangeView.as_view(), name='password_change'),
+    path('password_change/done/', MyPasswordChangeDoneView.as_view(), name='password_change_done'),
 ]

@@ -10,6 +10,7 @@ class CustomUser(AbstractUser):
     username = models.CharField(unique=True, max_length=20)
     phone_number = models.CharField(max_length=15, blank=True, null=True)  
     location = models.CharField(max_length=255, blank=True, null=True)
+    favorite_ads = models.ManyToManyField('Advertisement', related_name='favorited_by', blank=True)
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
@@ -66,9 +67,4 @@ class Advertisement(models.Model):
         verbose_name = 'Advertisement'
         verbose_name_plural = 'Advertisements'
 
-class FavoriteAdvertisement(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='favorite_ads')
-    advertisement = models.ForeignKey(Advertisement, on_delete=models.CASCADE, related_name='favorited_by')
 
-    class Meta:
-        unique_together = ('user', 'advertisement')

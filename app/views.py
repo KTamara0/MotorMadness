@@ -2,9 +2,12 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth import logout, login as auth_login, authenticate
 from .forms import AuthenticationForm, UserForm, AccountForm, AdvertisementForm, MotorForm
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser, Motor, Advertisement, FavoriteAdvertisement
+from .models import CustomUser, Motor, Advertisement
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
+from django.contrib import messages
+from django.contrib.auth import views as auth_views
+from django.urls import reverse_lazy
 
 
 # Create your views here.
@@ -137,7 +140,7 @@ def all_advertisements(request):
 
     favorites = []
     if request.user.is_authenticated:
-        favorites = request.user.favorite_ads.values_list('advertisement_id', flat=True)
+        favorites = request.user.favorite_ads.values_list('id', flat=True)
 
     return render(request, 'app/all_ads.html', {
         'ads': ads,
@@ -149,15 +152,25 @@ def all_advertisements(request):
 @login_required
 def toggle_favorite(request, ad_id):
     ad = get_object_or_404(Advertisement, id=ad_id)
-    favorite, created = FavoriteAdvertisement.objects.get_or_create(user=request.user, advertisement=ad)
-    if not created:
-        favorite.delete()
-        return JsonResponse({'status': 'removed'})
-    return JsonResponse({'status': 'added'})
+
+    # Provjera: korisnik ne može dodati svoj oglas u favorite
+    if ad.user == request.user:
+        messages.warning(request, "You cannot add your own ad to favorites.")
+        return redirect('app:ad_detail', ad_id=ad_id)
+
+    if ad in request.user.favorite_ads.all():
+        request.user.favorite_ads.remove(ad)
+        messages.success(request, "Ad removed from your favorites.")
+    else:
+        request.user.favorite_ads.add(ad)
+        messages.success(request, "Ad added to your favorites.")
+
+    return redirect('app:ad_detail', ad_id=ad_id)
+
 
 @login_required
 def favorite_ads_view(request):
-    favorites = Advertisement.objects.filter(favorited_by__user=request.user)
+    favorites = Advertisement.objects.filter(favorited_by=request.user)
     return render(request, 'app/favorites.html', {'favorites': favorites})
 
 @login_required
@@ -169,7 +182,16 @@ def my_ads(request):
 def ad_detail(request, ad_id):
     ad = get_object_or_404(Advertisement, id=ad_id)
     motor = ad.motor  # Dohvati povezani motor
-    return render(request, 'app/ad_detail.html', {'ad': ad, 'motor': motor})
+
+    is_favorite = False
+    if request.user.is_authenticated:
+        is_favorite = ad in request.user.favorite_ads.all()
+
+    return render(request, 'app/ad_detail.html', {
+        'ad': ad,
+        'motor': motor,
+        'is_favorite': is_favorite
+    })
 
 @login_required
 def edit_ad(request, ad_id):
@@ -195,3 +217,23 @@ def delete_ad(request, ad_id):
         return redirect('app:my_ads')
 
     return render(request, 'app/confirm_delete.html', {'ad': ad})
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = AccountForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your profile has been updated.")
+            return redirect('app:profile', user_id=request.user.id)  # Promijeni u svoj url za profil
+    else:
+        form = AccountForm(instance=request.user)
+    return render(request, 'app/edit_profile.html', {'form': form})
+
+class MyPasswordChangeView(auth_views.PasswordChangeView):
+    template_name = 'app/password_change.html'
+    success_url = reverse_lazy('app:password_change_done')
+
+class MyPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
+    template_name = 'app/password_change_done.html'
