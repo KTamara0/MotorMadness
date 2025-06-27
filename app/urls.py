@@ -1,11 +1,13 @@
 from django.urls import path
 from . import views
+from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from .views import MyPasswordChangeView, MyPasswordChangeDoneView
 
 app_name = "app"
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('login/', views.login_view, name='login'),
     path('register/', views.register, name='register'),
