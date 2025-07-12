@@ -21,6 +21,7 @@
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'app:profile' user_id=user.id %}" class="{% if request.path == '/profile/' %}active{% endif %}">My profile</a></li>
                     <li><a href="{% url 'app:add_advertisement' %}" class="{% if request.path == '/add/' %}active{% endif %}">Add an advertisement</a></li>
+                    <li><a href="{% url 'app:quiz' %}">Preporuka motora (kviz)</a></li>
                     {% if user.is_superuser %}
                         <li><a href="{% url 'admin:index' %}">Go to Admin Panel</a></li>
                     {% endif %}

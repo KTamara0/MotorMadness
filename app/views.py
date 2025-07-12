@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
-
+from django.utils import timezone
 
 # Create your views here.
 def home(request):
@@ -107,6 +107,32 @@ def add_motor(request):
 
 def all_advertisements(request):
     ads = Advertisement.objects.filter(is_active=True)
+
+    query = request.GET.get('q', '')
+    if query:
+        terms = query.lower().split()
+        for term in terms:
+            if term.isdigit():
+                if len(term) == 4:  # Pretpostavi godina
+                    ads = ads.filter(motor__made_at=term)
+                else:  # Možda kilometraža ili cijena
+                    ads = ads.filter(
+                        Q(motor__mileage__lte=term) |
+                        Q(motor__price__lte=term)
+                    )
+            elif term in ['new', 'excellent', 'very', 'good', 'not', 'working', 'smaller', 'investments', 'required']:
+                # Kombiniraj riječi za uvjete (npr. "very good")
+                condition_terms = ' '.join(t for t in terms if t in ['new', 'excellent', 'very', 'good', 'not', 'working', 'smaller', 'investments', 'required'])
+                ads = ads.filter(motor__condition__icontains=condition_terms)
+                break  # Zaustavi nakon prve prepoznate fraze uvjeta
+            else:
+                ads = ads.filter(
+                    Q(motor__brand__icontains=term) |
+                    Q(motor__model__icontains=term) |
+                    Q(motor__name__icontains=term) |
+                    Q(motor__description__icontains=term) |
+                     Q(motor__condition__icontains=term)
+                )
 
     # Filteri iz GET parametara
     brand = request.GET.get('brand')
@@ -237,3 +263,55 @@ class MyPasswordChangeView(auth_views.PasswordChangeView):
 
 class MyPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
     template_name = 'app/password_change_done.html'
+
+
+def quiz_view(request):
+    return render(request, 'app/quiz.html')
+
+def quiz_results(request):
+    if request.method == 'POST':
+        driving_style = request.POST.get('driving_style')
+        budget = request.POST.get('budget')
+        age_pref = request.POST.get('age_pref')
+        mileage_pref = request.POST.get('mileage_pref')
+        brand = request.POST.get('brand')
+
+        ads = Advertisement.objects.filter(is_active=True)
+        
+        # Filtriranje prema tipu vozača
+        if driving_style == 'beginner':
+            ads = ads.filter(motor__condition__in=['new', 'excellent'], motor__price__lte=4000)
+        elif driving_style == 'adventurer':
+            ads = ads.filter(motor__condition__in=['good','very good', 'smaller investments required'])
+        elif driving_style == 'experienced':
+            # Dodajem iskustvenom vozaču neki srednji raspon, primjer:
+            ads = ads.filter(motor__price__gte=3000, motor__price__lte=10000)
+
+        # Filtriranje prema budžetu
+        if budget == 'low':
+            ads = ads.filter(motor__price__lte=2000)
+        elif budget == 'mid':
+            ads = ads.filter(motor__price__gte=2000, motor__price__lte=5000)
+        elif budget == 'high':
+            ads = ads.filter(motor__price__gte=5000)
+
+        # Filtriranje prema dobi motora
+        current_year = timezone.now().year
+        if age_pref == 'new':
+            ads = ads.filter(motor__made_at__gte=current_year - 3)
+        elif age_pref == 'old':
+            ads = ads.filter(motor__made_at__lt=current_year - 8)
+
+        # Filtriranje prema kilometraži
+        if mileage_pref == 'low':
+            ads = ads.filter(motor__mileage__lte=10000)
+        elif mileage_pref == 'medium':
+            ads = ads.filter(motor__mileage__lte=30000)
+
+        # Filtriranje prema marki
+        if brand and brand != 'any':
+            ads = ads.filter(motor__brand__iexact=brand)
+
+        return render(request, 'app/quiz_results.html', {'recommended_motors': ads})
+    else:
+        return redirect('quiz')

@@ -25,4 +25,6 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('password_change/', MyPasswordChangeView.as_view(), name='password_change'),
     path('password_change/done/', MyPasswordChangeDoneView.as_view(), name='password_change_done'),
+    path('quiz/', views.quiz_view, name='quiz'),
+    path('quiz/results/', views.quiz_results, name='quiz_results'),
 ]

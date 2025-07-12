@@ -7,6 +7,11 @@
 {% block content %}
     <h2>All Motorcycle Ads</h2>
 
+<form method="GET" class="main-search-form">
+    <input type="text" name="q" placeholder="Search (e.g. BMW 2015 23000)" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+</form>
+
 <form method="GET" class="filter-form">
     <input type="text" name="brand" placeholder="Brand" value="{{ request.GET.brand }}">
     <input type="text" name="model" placeholder="Model" value="{{ request.GET.model }}">

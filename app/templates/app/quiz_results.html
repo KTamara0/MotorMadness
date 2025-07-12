@@ -1,0 +1,27 @@
+{% extends "app/base.html" %}
+
+{% load static %}
+
+{% block title %}Quiz Results{% endblock %}
+
+{% block content %}
+    <h2>Recommended Motorcycles for You</h2>
+
+    {% if recommended_motors %}
+    <ul>
+        {% for ad in recommended_motors %}
+            <li>
+                <a href="{% url 'app:ad_detail' ad.id %}">
+                    {{ ad.motor.brand }} {{ ad.motor.model }} - {{ ad.motor.price }} €
+                </a><br>
+                Year: {{ ad.motor.made_at }} |
+                Mileage: {{ ad.motor.mileage }} km |
+                Condition: {{ ad.motor.condition }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No motorcycles match your preferences at the moment.</p>
+{% endif %}
+
+{% endblock %}
