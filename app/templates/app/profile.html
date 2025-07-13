@@ -3,29 +3,47 @@
 {% block title %}{{ user.username }}'s Profile{% endblock %}
 
 {% block content %}
-  <h2>Welcome, {{ user.username }}!</h2>
-  <p>This is your profile page.</p>
-  <p>Your personal information:</p>
-  <p><strong>Email:</strong> {{ user.email }} </p>
-  <p><strong>Phone number:</strong> {{ user.phone_number }} </p>
-  <p><strong>Location:</strong> {{ user.location }} </p>
+<div class="profile-section">
+  <section class="profile-top">
+    <div class="profile-container">
+      <h2>Welcome, {{ user.username }}!</h2>
+      <div class="profile-card">
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Phone number:</strong> {{ user.phone_number }}</p>
+        <p><strong>Location:</strong> {{ user.location }}</p>
+      </div>
 
-  
-    <!-- Gumb za uređivanje profila -->
-    <a href="{% url 'app:edit_profile' %}" class="btn btn-primary">Edit Profile</a><br>
-    <a href="{% url 'app:password_change' %}" class="btn btn-danger">Change Password</a><br>
-    <br>
+      <div class="profile-actions">
+        <a href="{% url 'app:edit_profile' %}" class="nav-link">Edit profile</a>
+        <a href="{% url 'app:password_change' %}" class="nav-link">Change password</a>
+        <a href="{% url 'app:add_advertisement' %}" class="nav-link">Add advertisement</a>
+        <a href="{% url 'app:add_motor' %}" class="nav-link">Add motorcycle</a>
+        <a href="{% url 'app:my_ads' %}" class="nav-link">My advertisements</a>
+        <a href="{% url 'app:favorites' %}" class="nav-link">My favorite ads</a>
+      </div>
+    </div>
+  </section>
 
-  <a href="{% url 'app:add_advertisement' %}">Add a new advertisement</a><br>
-  <a href="{% url 'app:add_motor' %}">Add a new motor</a><br>
-  <a href="{% url 'app:my_ads' %}">My Advertisements</a><br>
-  <a href="{% url 'app:favorites' %}">My Favorite Ads</a>
-  <h2>Your Ads</h2>
-    <ul>
+
+  <section class="profile-bottom">
+      <h2>Your Ads</h2>
+      <div class="ads-grid">
         {% for ad in advertisements %}
-            <li>{{ ad.motor.name }} - {{ ad.motor.price }} USD ({{ ad.title }})</li>
+          <div class="ad-card">
+            <img src="{{ ad.motor.image.url }}" alt="{{ ad.motor.name }}" class="ad-image">
+            <h4>{{ ad.title }}</h4>
+            <p><strong>Motor:</strong> {{ ad.motor.name }}</p>
+            <p><strong>Price:</strong> {{ ad.motor.price }} EUR</p>
+            <div class="ad-buttons">
+              <a href="{% url 'app:ad_detail' ad.id %}" class="btn btn-details">Details</a>
+              <a href="{% url 'app:edit_ad' ad.id %}" class="btn btn-edit">Edit</a>
+            </div>
+          </div>
         {% empty %}
-            <p>No advertisements found.</p>
+          <p>No advertisements found.</p>
         {% endfor %}
-    </ul>
+      </div>
+  </section>
+
+</div>
 {% endblock %}
