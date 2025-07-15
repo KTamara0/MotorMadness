@@ -86,7 +86,7 @@ class AdvertisementForm(ModelForm):
 class MotorForm(ModelForm):
     class Meta:
         model = Motor
-        fields = ['name', 'brand', 'model', 'description', 'price', 'made_at', 'mileage', 'condition', 'image']
+        fields = ['name', 'brand', 'model', 'description', 'price', 'power', 'made_at', 'mileage', 'condition', 'image']
         widgets = {
             'condition': forms.Select(choices=Motor.VEHICLE_CONDITION, attrs={'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., My Red Honda'}),
@@ -94,6 +94,7 @@ class MotorForm(ModelForm):
             'model': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., Civic'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Describe the vehicle'}),
             'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 15000.00'}),
+            'power': forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : 'e.g., 50'}),
             'made_at': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 2015'}),
             'mileage': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 50000'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
@@ -104,6 +105,7 @@ class MotorForm(ModelForm):
             'model': 'Model',
             'description': 'Description',
             'price': 'Price (USD)',
+            'power': 'Power (HP)',
             'made_at': 'Year Manufactured',
             'mileage': 'Mileage',
             'condition': 'Condition',

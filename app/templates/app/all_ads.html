@@ -1,6 +1,9 @@
 {% extends "app/base.html" %}
 
 {% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'app/all_ads.css' %}">
+{% endblock %}
 
 {% block title %}All Ads{% endblock %}
 
@@ -13,35 +16,139 @@
 </form>
 
 <form method="GET" class="filter-form">
-    <input type="text" name="brand" placeholder="Brand" value="{{ request.GET.brand }}">
-    <input type="text" name="model" placeholder="Model" value="{{ request.GET.model }}">
-    <input type="number" name="min_price" placeholder="Min Price (€)" value="{{ request.GET.min_price }}">
-    <input type="number" name="max_price" placeholder="Max Price (€)" value="{{ request.GET.max_price }}">
-    <input type="number" name="min_year" placeholder="Min Year" value="{{ request.GET.min_year }}">
-    <input type="number" name="max_year" placeholder="Max Year" value="{{ request.GET.max_year }}">
-    <input type="number" name="min_mileage" placeholder="Min Mileage (km)" value="{{ request.GET.min_mileage }}">
-    <input type="number" name="max_mileage" placeholder="Max Mileage (km)" value="{{ request.GET.max_mileage }}">
-    <select name="condition">
-        <option value="" {% if not request.GET.condition %}selected{% endif %}>Any Condition</option>
-        <option value="new" {% if request.GET.condition == 'new' %}selected{% endif %}>New</option>
-        <option value="excellent" {% if request.GET.condition == 'excellent' %}selected{% endif %}>Excellent</option>
-        <option value="very good" {% if request.GET.condition == 'very good' %}selected{% endif %}>Very good</option>
-        <option value="good" {% if request.GET.condition == 'good' %}selected{% endif %}>Good</option>
-        <option value="smaller investments required" {% if request.GET.condition == 'smaller investments required' %}selected{% endif %}>Smaller investments required</option>
-        <option value="not working" {% if request.GET.condition == 'not working' %}selected{% endif %}>Not working</option>
-    </select>
+    <!-- Dropdown za marku -->
+     <div class="filter-item">
+        <label for="brand">Brand:</label>
+        <select id="brand" name="brand">
+            <option value="" {% if not request.GET.brand %}selected{% endif %}>Any Brand</option>
+            {% for b in brands %}
+                <option value="{{ b }}" {% if request.GET.brand == b %}selected{% endif %}>{{ b }}</option>
+            {% endfor %}
+        </select>
+     </div>
+    <!-- Dropdown za model -->
+    <div class="filter-item">
+        <label for="model">Model:</label>
+        <select id="model" name="model">
+            <option value="" {% if not request.GET.model %}selected{% endif %}>Any Model</option>
+            {% for m in models %}
+                <option value="{{ m }}" {% if request.GET.model == m %}selected{% endif %}>{{ m }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Range slider za cijenu -->
+     <div class="filter-item">
+        <label for="min_price">Min Price (€): <span id="minPriceVal">{{ request.GET.min_price }}</span></label>
+        <input type="range" id="min_price" name="min_price" min="0" max="50000" step="100" value="{{ request.GET.min_price|default:0 }}">
+     </div>
+    
+     <div class="filter-item">
+        <label for="max_price">Max Price (€): <span id="maxPriceVal">{{ request.GET.max_price }}</span></label>
+        <input type="range" id="max_price" name="max_price" min="0" max="50000" step="100" value="{{ request.GET.max_price|default:50000 }}">
+     </div>
+
+ <!-- Range slider za godinu proizvodnje -->
+     <div class="filter-item">
+        <label for="min_year">Min Year: <span id="minYearVal">{{ request.GET.min_year|default:"1900" }}</span></label>
+        <input type="range" id="min_year" name="min_year" min="1900" max="{{ now|date:'Y' }}" step="1" value="{{ request.GET.min_year|default:"1900" }}">
+     </div>
+
+     <div class="filter-item">
+        <label for="max_year">Max Year: <span id="maxYearVal">{{ request.GET.max_year|default:now.year }}</span></label>
+        <input type="range" id="max_year" name="max_year" min="1900" max="{{ now.year }}" step="1" value="{{ request.GET.max_year|default:now.year }}">
+     </div>
+
+    <!-- Range slider za kilometražu -->
+     <div class="filter-item">
+        <label for="min_mileage">Min Mileage (km): <span id="minMileageVal">{{ request.GET.min_mileage|default:"0" }}</span></label>
+        <input type="range" id="min_mileage" name="min_mileage" min="0" max="200000" step="1000" value="{{ request.GET.min_mileage|default:"0" }}">
+     </div>
+
+     <div class="filter-item">
+        <label for="max_mileage">Max Mileage (km): <span id="maxMileageVal">{{ request.GET.max_mileage|default:"200000" }}</span></label>
+        <input type="range" id="max_mileage" name="max_mileage" min="0" max="200000" step="1000" value="{{ request.GET.max_mileage|default:"200000" }}">
+     </div>
+
+    <!-- Range slider za snagu motora -->
+     <div class="filter-item">
+        <label for="min_power">Min Power (HP): <span id="minPowerVal">{{ request.GET.min_power|default:"0" }}</span></label>
+        <input type="range" id="min_power" name="min_power" min="0" max="300" step="1" value="{{ request.GET.min_power|default:"0" }}">
+     </div>
+
+     <div class="filter-item">
+        <label for="max_power">Max Power (HP): <span id="maxPowerVal">{{ request.GET.max_power|default:"300" }}</span></label>
+        <input type="range" id="max_power" name="max_power" min="0" max="300" step="1" value="{{ request.GET.max_power|default:"300" }}">
+     </div>
+
+    <!-- Dropdown za lokaciju -->
+     <div class="filter-item">
+        <label for="location">Location:</label>
+        <select id="location" name="location">
+            <option value="" {% if not request.GET.location %}selected{% endif %}>Any Location</option>
+            {% for loc in locations %}
+                <option value="{{ loc }}" {% if request.GET.location == loc %}selected{% endif %}>{{ loc }}</option>
+            {% endfor %}
+        </select>
+     </div>
+
+     <div class="filter-item">
+        <label for="condition">Condition:</label>
+        <select id="condition" name="condition">
+            <option value="" {% if not request.GET.condition %}selected{% endif %}>Any Condition</option>
+            <option value="new" {% if request.GET.condition == 'new' %}selected{% endif %}>New</option>
+            <option value="excellent" {% if request.GET.condition == 'excellent' %}selected{% endif %}>Excellent</option>
+            <option value="very good" {% if request.GET.condition == 'very good' %}selected{% endif %}>Very good</option>
+            <option value="good" {% if request.GET.condition == 'good' %}selected{% endif %}>Good</option>
+            <option value="smaller investments required" {% if request.GET.condition == 'smaller investments required' %}selected{% endif %}>Smaller investments required</option>
+            <option value="not working" {% if request.GET.condition == 'not working' %}selected{% endif %}>Not working</option>
+        </select>
+     </div>
+
     <button type="submit">Search</button>
 </form>
-    <ul>
+
+<hr>
+
+<!-- Ispis oglasa -->
+<div class="ads-list">
         {% for ad in ads %}
-            <li>
-                <a href="{% url 'app:ad_detail' ad.id %}">{{ ad.title }}</a>
-                - {{ ad.motor.price }} €
-                - {{ ad.motor.brand }}
-                - {{ ad.motor.model }}
-            </li>
+           <div class="ad-item">
+                <a href="{% url 'app:ad_detail' ad.id %}">
+                    <img src="{{ ad.motor.image.url }}" alt="{{ ad.motor.name }}" class="ad-image">
+                    <h3>{{ ad.title }}</h3>
+                </a>
+                <p><strong>{{ ad.motor.brand }}</strong> - {{ ad.motor.model }}</p>
+                <p>{{ ad.motor.price }} €</p>
+                {% if ad.id in favorites %}
+                    <p class="favorite">❤️ Favorite</p>
+                {% endif %}
+            </div>
         {% empty %}
             <p>No ads found.</p>
         {% endfor %}
-    </ul>
+</div>
+
+
+<script>
+    // Skripta za prikaz trenutne vrijednosti range slidera pored etikete
+    function updateValue(sliderId, displayId) {
+        const slider = document.getElementById(sliderId);
+        const display = document.getElementById(displayId);
+        display.textContent = slider.value;
+
+        slider.addEventListener('input', () => {
+            display.textContent = slider.value;
+        });
+    }
+
+    updateValue('min_price', 'minPriceVal');
+    updateValue('max_price', 'maxPriceVal');
+    updateValue('min_year', 'minYearVal');
+    updateValue('max_year', 'maxYearVal');
+    updateValue('min_mileage', 'minMileageVal');
+    updateValue('max_mileage', 'maxMileageVal');
+    updateValue('min_power', 'minPowerVal');
+    updateValue('max_power', 'maxPowerVal');
+</script>
 {% endblock %}

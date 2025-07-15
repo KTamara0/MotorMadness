@@ -35,6 +35,7 @@ class Motor(models.Model):
     model = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
+    power = models.PositiveIntegerField(null=True, blank=True)
     made_at = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1900), MaxValueValidator(timezone.now().year)]
     )

@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.utils.timezone import now
 
 # Create your views here.
 def home(request):
@@ -111,6 +112,9 @@ def all_advertisements(request):
     query = request.GET.get('q', '')
     if query:
         terms = query.lower().split()
+        condition_keywords = ['new', 'excellent', 'very', 'good', 'not', 'working', 'smaller', 'investments', 'required']
+
+        condition_filters = Q()
         for term in terms:
             if term.isdigit():
                 if len(term) == 4:  # Pretpostavi godina
@@ -120,19 +124,18 @@ def all_advertisements(request):
                         Q(motor__mileage__lte=term) |
                         Q(motor__price__lte=term)
                     )
-            elif term in ['new', 'excellent', 'very', 'good', 'not', 'working', 'smaller', 'investments', 'required']:
-                # Kombiniraj riječi za uvjete (npr. "very good")
-                condition_terms = ' '.join(t for t in terms if t in ['new', 'excellent', 'very', 'good', 'not', 'working', 'smaller', 'investments', 'required'])
-                ads = ads.filter(motor__condition__icontains=condition_terms)
-                break  # Zaustavi nakon prve prepoznate fraze uvjeta
+            elif term in condition_keywords:
+                condition_filters |= Q(motor__condition__icontains=term)
             else:
                 ads = ads.filter(
                     Q(motor__brand__icontains=term) |
                     Q(motor__model__icontains=term) |
                     Q(motor__name__icontains=term) |
                     Q(motor__description__icontains=term) |
-                     Q(motor__condition__icontains=term)
+                    Q(motor__condition__icontains=term)
                 )
+        if condition_filters:
+            ads = ads.filter(condition_filters)
 
     # Filteri iz GET parametara
     brand = request.GET.get('brand')
@@ -144,6 +147,9 @@ def all_advertisements(request):
     min_mileage = request.GET.get('min_mileage')
     max_mileage = request.GET.get('max_mileage')
     condition = request.GET.get('condition')
+    min_power = request.GET.get('min_power')
+    max_power = request.GET.get('max_power')
+    location = request.GET.get('location')
 
     if brand:
         ads = ads.filter(motor__brand__icontains=brand)
@@ -163,15 +169,30 @@ def all_advertisements(request):
         ads = ads.filter(motor__mileage__lte=max_mileage)
     if condition:
         ads = ads.filter(motor__condition=condition)
+    if min_power:
+        ads = ads.filter(motor__power__gte=min_power)
+    if max_power:
+        ads = ads.filter(motor__power__lte=max_power)
+    if location:
+        ads = ads.filter(user__location__icontains=location)
 
     favorites = []
     if request.user.is_authenticated:
         favorites = request.user.favorite_ads.values_list('id', flat=True)
 
+     # Podaci za dropdown liste
+    brands = Motor.objects.values_list('brand', flat=True).distinct()
+    models = Motor.objects.values_list('model', flat=True).distinct()
+    locations = CustomUser.objects.values_list('location', flat=True).distinct()
+
     return render(request, 'app/all_ads.html', {
         'ads': ads,
         'favorites': favorites,
+        'brands': brands,
+        'models': models,
+        'locations': locations,
         'request' : request,
+        'now' : now(),
     })
 
 
@@ -199,10 +220,6 @@ def favorite_ads_view(request):
     favorites = Advertisement.objects.filter(favorited_by=request.user)
     return render(request, 'app/favorites.html', {'favorites': favorites})
 
-@login_required
-def my_ads(request):
-    ads = Advertisement.objects.filter(user=request.user)
-    return render(request, 'app/my_ads.html', {'ads': ads})
 
 @login_required
 def ad_detail(request, ad_id):
@@ -220,6 +237,21 @@ def ad_detail(request, ad_id):
     })
 
 @login_required
+def edit_motor(request, motor_id):
+    motor = get_object_or_404(Motor, id=motor_id, user=request.user)
+
+    if request.method == 'POST':
+        form = MotorForm(request.POST, request.FILES, instance=motor)
+        if form.is_valid():
+            form.save()
+            return redirect('app:profile', user_id=request.user.id)  
+    else:
+        form = MotorForm(instance=motor)
+
+    return render(request, 'app/edit_motor.html', {'form': form, 'motor': motor})
+
+
+@login_required
 def edit_ad(request, ad_id):
     ad = get_object_or_404(Advertisement, id=ad_id, user=request.user)
 
@@ -227,7 +259,7 @@ def edit_ad(request, ad_id):
         form = AdvertisementForm(request.POST, request.FILES, instance=ad)
         if form.is_valid():
             form.save()
-            return redirect('app:my_ads')
+            return redirect('app:profile', user_id=request.user.id)
     else:
         form = AdvertisementForm(instance=ad)
 
@@ -240,7 +272,7 @@ def delete_ad(request, ad_id):
 
     if request.method == 'POST':
         ad.delete()
-        return redirect('app:my_ads')
+        return redirect('app:profile', user_id=request.user.id)
 
     return render(request, 'app/confirm_delete.html', {'ad': ad})
 

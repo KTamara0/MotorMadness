@@ -1,6 +1,11 @@
 {% extends "app/base.html" %}
 
+{% load static %}
 {% block title %}{{ user.username }}'s Profile{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'app/profile.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="profile-section">
@@ -18,7 +23,6 @@
         <a href="{% url 'app:password_change' %}" class="nav-link">Change password</a>
         <a href="{% url 'app:add_advertisement' %}" class="nav-link">Add advertisement</a>
         <a href="{% url 'app:add_motor' %}" class="nav-link">Add motorcycle</a>
-        <a href="{% url 'app:my_ads' %}" class="nav-link">My advertisements</a>
         <a href="{% url 'app:favorites' %}" class="nav-link">My favorite ads</a>
       </div>
     </div>
@@ -36,7 +40,9 @@
             <p><strong>Price:</strong> {{ ad.motor.price }} EUR</p>
             <div class="ad-buttons">
               <a href="{% url 'app:ad_detail' ad.id %}" class="btn btn-details">Details</a>
-              <a href="{% url 'app:edit_ad' ad.id %}" class="btn btn-edit">Edit</a>
+              <a href="{% url 'app:edit_ad' ad.id %}" class="btn btn-edit">Edit ad</a>
+              <a href="{% url 'app:edit_motor' ad.motor.id %}" class="btn btn-edit-motor">Edit Motorcycle</a>
+              <a href="{% url 'app:delete_ad' ad.id %}" class="btn btn-delete">Delete ad</a>
             </div>
           </div>
         {% empty %}
