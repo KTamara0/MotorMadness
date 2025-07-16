@@ -1,5 +1,11 @@
 {% extends "app/base.html" %}
 
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'app/add_motor.css' %}">
+{% endblock %}
+
 {% block title %}Add motor{% endblock %}
 
 {% block content %}
@@ -10,6 +16,6 @@
             {{ form.as_p }}
             <button type="submit">Add Vehicle</button>
         </form>
-        <p><a href="{% url 'app:add_advertisement' %}">Back to Create Advertisement</a></p>
+        <p><a href="{% url 'app:add_advertisement' %}">BACK TO CREATE ADVERTISEMENT!</a></p>
     </div>
 {% endblock %}

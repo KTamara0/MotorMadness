@@ -280,11 +280,11 @@ def delete_ad(request, ad_id):
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
-        form = AccountForm(request.POST, instance=request.user)
+        form = AccountForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, "Your profile has been updated.")
-            return redirect('app:profile', user_id=request.user.id)  # Promijeni u svoj url za profil
+            return redirect('app:profile', user_id=request.user.id)  
     else:
         form = AccountForm(instance=request.user)
     return render(request, 'app/edit_profile.html', {'form': form})

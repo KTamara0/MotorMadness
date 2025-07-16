@@ -1,0 +1,92 @@
+body {
+    background: url("/static/images/garage.webp") no-repeat center center fixed;
+    background-size: cover;
+    font-family: sans-serif;
+    color: #fff; /* zbog tamne pozadine */
+    margin: 0;
+    padding: 0;
+}
+
+.edit-ad-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px 25px;
+    background-color: rgba(0, 0, 0, 0.7); /* poluprozirna crna pozadina */
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+    color: #fff;
+}
+
+.edit-ad-container h2 {
+    margin-bottom: 25px;
+    color:  #4aa7e1; 
+    text-align: center;
+}
+
+.edit-ad-form p {
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.edit-ad-form input,
+.edit-ad-form textarea,
+.edit-ad-form select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: #fff;
+    color: #000;
+    box-sizing: border-box;
+}
+
+.edit-ad-form input:hover,
+.edit-ad-form textarea:hover,
+.edit-ad-form select:hover {
+    background-color: #e0e0e0;
+    transition: 0.3s ease;
+}
+
+.btn-primary {
+    background-color:  #4aa7e1; 
+    color: #ffffff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background-color: #002ee6a1; 
+}
+
+.messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.messages li {
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    color: #000;
+}
+
+.messages li.error {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+.messages li.success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}

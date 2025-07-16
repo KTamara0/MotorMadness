@@ -2,13 +2,21 @@
 
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'app/ad_delete.css' %}">
+{% endblock %}
+
 {% block title %}Delete Ad{% endblock %}
 
 {% block content %}
-    <h2>Are you sure you want to delete "{{ ad.title }}"?</h2>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Yes, delete</button>
-        <a href="{% url 'app:my_ads' %}">Cancel</a>
+<div class="overlay">
+  <div class="delete-modal">
+    <h2>Are you sure you want to delete <br> "<strong>{{ ad.title }}</strong>"?</h2>
+    <form method="post" class="btn-group">
+      {% csrf_token %}
+      <button type="submit" class="btn delete">Yes, delete</button>
+      <a href="{% url 'app:profile' user_id=user.id %}" class="btn cancel">Cancel</a>
     </form>
+  </div>
+</div>
 {% endblock %}

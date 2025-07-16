@@ -2,13 +2,29 @@
 
 {% load static %}
 
-{% block title %}Edit Ad{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'app/edit_ad.css' %}">
+{% endblock %}
+
+{% block title %}Edit Advertisement - {{ ad.title }}{% endblock %}
 
 {% block content %}
-    <h2>Edit Advertisement: {{ ad.title }}</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save Changes</button>
+  <div class="edit-ad-container">
+    <h2>Edit Advertisement: <span class="ad-title">{{ ad.title }}</span></h2>
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="edit-ad-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <button type="submit" class="btn btn-primary">Save Changes</button>
     </form>
+  </div>
 {% endblock %}

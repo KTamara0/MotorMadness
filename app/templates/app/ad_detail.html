@@ -1,39 +1,74 @@
 {% extends "app/base.html" %}
 
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'app/ad_detail.css' %}">
+{% endblock %}
+
 {% block title %}{{ ad.title }}{% endblock %}
 
 {% block content %}
-<div class="ad-details">
-    <h2>{{ ad.title }}</h2>
-    <p><strong>Brand:</strong> {{ ad.motor.brand }}</p>
-    <p><strong>Model:</strong> {{ ad.motor.model }}</p>
-    <p><strong>Price:</strong> {{ ad.motor.price }} €</p>
-    <p><strong>Power:</strong> {{ ad.motor.power }} HP</p>
-    <p><strong>Year:</strong> {{ ad.motor.made_at }}</p>
-    <p><strong>Mileage:</strong> {{ ad.motor.mileage }} km</p>
-    <p><strong>Condition:</strong> {{ ad.motor.condition }} </p>
-    <p><strong>Description:</strong> {{ ad.motor.description }}</p>
+<div class="ad-container">
+    <div class="top-section">
+        <div class="image-section">
+            {% if ad.motor.image %}
+                <img src="{{ ad.motor.image.url }}" alt="Image of {{ ad.title }}">
+            {% endif %}
+        </div>
+        <div class="info-section">
+            <h1>{{ ad.title }}</h1>
+            <p><strong>Brand:</strong> {{ ad.motor.brand }}</p>
+            <p><strong>Model:</strong> {{ ad.motor.model }}</p>
+            <p><strong>Price:</strong> {{ ad.motor.price }} €</p>
+            <p><strong>Power:</strong> {{ ad.motor.power }} HP</p>
+            <p><strong>Year:</strong> {{ ad.motor.made_at }}</p>
+            <p><strong>Mileage:</strong> {{ ad.motor.mileage }} km</p>
+            <p><strong>Condition:</strong> {{ ad.motor.condition }}</p>
+            
+            {% if user.is_authenticated %}
+                {% if ad.user == user %}
+                    <p class="info-msg">This is your ad.</p>
+                {% else %}
+                    <form method="POST" action="{% url 'app:toggle_favorite' ad.id %}">
+                        {% csrf_token %}
+                        {% if ad in user.favorite_ads.all %}
+                            <button type="submit" class="btn btn-remove-fav">Remove from Favorites</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-favorite">Add to Favorites</button>
+                        {% endif %}
+                    </form>
+                {% endif %}
+            {% else %}
+                <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add this ad to your favorites.</p>
+            {% endif %}
+        </div>
+    </div>
 
-    {% if ad.motor.image %}
-        <img src="{{ ad.motor.image.url }}" alt="Image of {{ ad.title }}">
-    {% endif %}
+    <div class="description-section">
+        <h2>Advertisement Description</h2>
+        <p>{{ ad.description|linebreaksbr }}</p>
+    </div>
+
+    <div class="motor-details">
+        <h2>Motor Description</h2>
+        <p>{{ ad.motor.description|linebreaksbr }}</p>
+    </div>
+
+    <div class="contact-info">
+        <h3>Seller Contact</h3>
+        <p><strong>Username:</strong> {{ ad.user.username }}</p>
+        <p><strong>Email:</strong> <a href="mailto:{{ ad.user.email }}">{{ ad.user.email }}</a></p>
+        {% if ad.user.phone_number %}
+            <p><strong>Phone:</strong> <a href="tel:{{ ad.user.phone_number }}">{{ ad.user.phone_number }}</a></p>
+        {% endif %}
+        {% if ad.user.location %}
+            <p><strong>Location:</strong> {{ ad.user.location }}</p>
+        {% endif %}
+    </div>
 </div>
 
-{% if user.is_authenticated %}
-    {% if ad.user == user %}
-        <p class="info-msg">This is your ad.</p>
-    {% else %}
-        <form method="POST" action="{% url 'app:toggle_favorite' ad.id %}">
-            {% csrf_token %}
-            {% if ad in user.favorite_ads.all %}
-                <button type="submit" class="btn btn-remove-fav">Remove from Favorites</button>
-            {% else %}
-                <button type="submit" class="btn btn-favorite">Add to Favorites</button>
-            {% endif %}
-        </form>
-    {% endif %}
-{% else %}
-    <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to add this ad to your favorites.</p>
-{% endif %}
-
+<footer class="footer">
+    <p>&copy; 2025 MotorMadness</p>
+</footer>
 {% endblock %}
