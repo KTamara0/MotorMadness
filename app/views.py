@@ -132,7 +132,8 @@ def all_advertisements(request):
                     Q(motor__model__icontains=term) |
                     Q(motor__name__icontains=term) |
                     Q(motor__description__icontains=term) |
-                    Q(motor__condition__icontains=term)
+                    Q(motor__condition__icontains=term) |
+                    Q(user__location__icontains=term)
                 )
         if condition_filters:
             ads = ads.filter(condition_filters)
@@ -300,6 +301,8 @@ class MyPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
 def quiz_view(request):
     return render(request, 'app/quiz.html')
 
+from django.utils import timezone
+
 def quiz_results(request):
     if request.method == 'POST':
         driving_style = request.POST.get('driving_style')
@@ -309,41 +312,58 @@ def quiz_results(request):
         brand = request.POST.get('brand')
 
         ads = Advertisement.objects.filter(is_active=True)
-        
-        # Filtriranje prema tipu vozača
-        if driving_style == 'beginner':
-            ads = ads.filter(motor__condition__in=['new', 'excellent'], motor__price__lte=4000)
-        elif driving_style == 'adventurer':
-            ads = ads.filter(motor__condition__in=['good','very good', 'smaller investments required'])
-        elif driving_style == 'experienced':
-            # Dodajem iskustvenom vozaču neki srednji raspon, primjer:
-            ads = ads.filter(motor__price__gte=3000, motor__price__lte=10000)
 
-        # Filtriranje prema budžetu
-        if budget == 'low':
-            ads = ads.filter(motor__price__lte=2000)
-        elif budget == 'mid':
-            ads = ads.filter(motor__price__gte=2000, motor__price__lte=5000)
-        elif budget == 'high':
-            ads = ads.filter(motor__price__gte=5000)
-
-        # Filtriranje prema dobi motora
         current_year = timezone.now().year
-        if age_pref == 'new':
-            ads = ads.filter(motor__made_at__gte=current_year - 3)
-        elif age_pref == 'old':
-            ads = ads.filter(motor__made_at__lt=current_year - 8)
+        recommended_ads = []
 
-        # Filtriranje prema kilometraži
-        if mileage_pref == 'low':
-            ads = ads.filter(motor__mileage__lte=10000)
-        elif mileage_pref == 'medium':
-            ads = ads.filter(motor__mileage__lte=30000)
+        for ad in ads:
+            motor = ad.motor
+            score = 0
 
-        # Filtriranje prema marki
-        if brand and brand != 'any':
-            ads = ads.filter(motor__brand__iexact=brand)
+            # Provjera driving_style (primjer, možeš prilagoditi)
+            if driving_style == 'beginner':
+                if motor.condition in ['new', 'excellent'] and motor.price <= 5000:
+                    score += 1
+            elif driving_style == 'adventurer':
+                if motor.condition in ['good','very good', 'smaller investments required']:
+                    score += 1
+            elif driving_style == 'experienced':
+                if 5000 <= motor.price <= 15000:
+                    score += 1
 
-        return render(request, 'app/quiz_results.html', {'recommended_motors': ads})
+            # Provjera budžeta
+            if budget == 'low' and motor.price <= 5000:
+                score += 1
+            elif budget == 'mid' and 5000 <= motor.price <= 10000:
+                score += 1
+            elif budget == 'high' and motor.price >= 10000:
+                score += 1
+
+            # Provjera dobi motora
+            motor_age = current_year - motor.made_at
+            if age_pref == 'new' and motor.made_at >= current_year - 3:
+                score += 1
+            elif age_pref == 'old' and motor.made_at < current_year - 8:
+                score += 1
+            elif age_pref == 'any':
+                score += 1
+
+            # Provjera kilometraže
+            if mileage_pref == 'low' and motor.mileage <= 10000:
+                score += 1
+            elif mileage_pref == 'medium' and motor.mileage <= 30000:
+                score += 1
+            elif mileage_pref == 'any':
+                score += 1
+
+            # Provjera marke
+            if brand == 'any' or motor.brand.lower() == brand.lower():
+                score += 1
+
+            # Ako je score 3 ili više, dodaj u preporuke
+            if score >= 4:
+                recommended_ads.append(ad)
+
+        return render(request, 'app/quiz_results.html', {'recommended_motors': recommended_ads})
     else:
         return redirect('quiz')

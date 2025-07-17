@@ -1,0 +1,89 @@
+/* quiz.css */
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: url("/static/images/bg-quiz.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Drži sliku zalijepljenu pri skrolanju */
+}
+
+.quiz-header {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #222;
+    font-style: italic;
+}
+
+.quiz-form {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-question {
+    margin-bottom: 30px;
+}
+
+.icon {
+    width: 26px;       /* veličina ikonice */
+    height: 34px;      /* može biti i auto za omjer */
+    vertical-align: middle;  /* poravnanje s tekstom */
+    margin-right: 5px; /* razmak između ikonice i teksta */
+}
+
+.quiz-title {
+    font-size: 20px;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.quiz-option {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #444;
+    cursor: pointer;
+}
+
+.quiz-option input {
+    margin-right: 8px;
+}
+
+.quiz-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.quiz-submit {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.quiz-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.quiz-button:hover {
+    background-color: #0056b3;
+}
+
+

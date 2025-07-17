@@ -37,9 +37,11 @@
     
 
     <!-- Glavni sadržaj stranice -->
+<div id="page-wrapper" class="{% block page_class %}{% endblock %}">
     <div class="container">
         {% block content %}{% endblock %}
     </div>
+</div>
 
     {% if messages %}
         <div class="messages">
@@ -49,14 +51,18 @@
         </div>
     {% endif %}
 
+    <footer class="footer">
+        <p>&copy; 2025 MotorMadness. All rights reserved.</p>
+    </footer>
+
     <script>
-        // Funkcija za prikazivanje/sakrivanje padajućeg izbornika
         function toggleMenu() {
             const menu = document.querySelector('.nav-options');
-            menu.classList.toggle('active');  // Dodavanje/uklanjanje klase za vidljivost
+            menu.classList.toggle('active');  
         }
     </script>
-</body>
 
+
+</body>
 
 </html>

@@ -1,4 +1,4 @@
-/* Navigacijska traka */
+
 .navbar {
     position: sticky;
     top: 0;
@@ -7,6 +7,8 @@
     padding: 1rem 0;
     z-index: 1000;
 }
+
+
 
 /* Centriranje ul kroz pozicioniranje */
 .navlinks {
@@ -37,19 +39,17 @@
 
 
 
-
-/* Responsivni dizajn za manje ekrane */
 @media (max-width: 768px) {
     nav .nav-options {
-        display: none;  /* Skriva navigaciju za male ekrane */
+        display: none;  
     }
 
     .nav-options.active {
-        display: flex;  /* Prikazuje navigaciju kad je aktivno */
+        display: flex; 
     }
 
     nav .current-page {
-        display: none;  /* Sakriva tekst kad se koristi hamburger */
+        display: none;  
     }
 
     nav a {
@@ -63,6 +63,23 @@
 /* Omot za home koji zauzima cijeli ekran */
 
 /* Glavni sadržaj centriran unutar wrappera */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#page-wrapper {
+    flex: 1;
+}
+
 .home_title {
     height: 100vh;
     background: linear-gradient(to bottom, #2e2e2e, #e0e0e0);
@@ -80,14 +97,14 @@
 }
 
 
-/* Stilovi za naslov */
+
 .title {
-    font-size: 4rem; /* Veći font za naslov */
+    font-size: 4rem; 
     color: #64b5f4; 
-    margin: 0; /* Uklanja margine oko naslova */
+    margin: 0; 
 }
 
-/* Stilovi za red slika */
+
 .image-row {
     display: flex; /* Postavlja slike u red */
     justify-content: center; /* Centriranje slika unutar reda */
@@ -97,7 +114,7 @@
 }
 
 
-/* Stilovi za slike */
+
 .image {
     width: 100px; /* Postavlja širinu slike */
     height: 100px; /* Postavlja visinu slike */
@@ -108,7 +125,6 @@
     transition: all 0.3s ease-in-out; /* Glatke promjene prilikom hover efekta */
 }
 
-/* Hover efekt na slike */
 .image:hover {
     filter: grayscale(0%); /* Boje se vraćaju na normalne prilikom hovera */
     transform: scale(1.1); /* Povećanje slike pri hoveru */
@@ -121,12 +137,6 @@
     text-shadow: #000;
 }
 
-html, body {
-    height: 100%;  /* Postavlja visinu stranice na 100% */
-    margin: 0;  /* Uklanja sve margine */
-    padding: 0;  /* Uklanja sve paddinge */
-}
-
 
 /* Stil za login-container div koji sadrži naslov i formu */
 .login-container {
@@ -134,7 +144,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;  /* Pokriva cijeli visoki ekran */
+    min-height: 100vh;  /* Pokriva cijeli visoki ekran */
     background-image: 
         linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
         url("/static/images/log.jpg");
@@ -144,26 +154,26 @@ html, body {
     text-align: center;  /* Naslov i forma bit će centrirani */
 }
 
-/* Stil za naslov */
+
 .login-container h1 {
     font-size: 36px;
     margin-bottom: 20px;
 }
 
-/* Stil za formu */
+
 .login-container form {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 400px;  /* Maksimalna širina forme */
-    background-color: rgba(0, 0, 0, 0.5);  /* Poluprozirna pozadina forme */
+    max-width: 400px;  
+    background-color: rgba(0, 0, 0, 0.5);  
     padding: 20px;
     border-radius: 8px;
 }
 
-/* Stil za dugme */
+
 .login-container button {
     background-color: #424241;
     color: #64b5f4;
@@ -198,13 +208,13 @@ html, body {
 }
 
 
-/* Stil za login-container div koji sadrži naslov i formu */
+
 .register-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;  /* Pokriva cijeli visoki ekran */
+    min-height: 100vh;  /* Pokriva cijeli visoki ekran */
     background-image: 
         linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
         url("/static/images/log.jpg");
@@ -265,4 +275,13 @@ html, body {
 
 .login-link a:hover {
     color: rgb(52, 74, 240);
+}
+
+
+.footer {
+    background-color: #111;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin-top: 0px;
 }

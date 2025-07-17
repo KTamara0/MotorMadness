@@ -2,19 +2,31 @@
 
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'app/favorite_ads.css' %}">
+{% endblock %}
+
 {% block title %}My Favorites{% endblock %}
 
 {% block content %}
-    <h2>Favorite Advertisements</h2>
+<div id="page-wrapper" class="favorites">
+    <h2 class="favorites-title">Favorite Advertisements</h2>
     {% if favorites %}
-        <ul>
+        <div class="favorites-container">
             {% for ad in favorites %}
-                <li>
-                    <a href="{% url 'app:ad_detail' ad.id %}">{{ ad.title }}</a> - {{ ad.motor.price }} €
-                </li>
+                <div class="favorite-card">
+                    <a href="{% url 'app:ad_detail' ad.id %}">
+                        <img src="{{ ad.motor.image.url }}" alt="{{ ad.title }}" class="favorite-image">
+                        <div class="favorite-info">
+                            <h3 class="favorite-title">{{ ad.title }}</h3>
+                            <p class="favorite-price">{{ ad.motor.price }} €</p>
+                        </div>
+                    </a>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     {% else %}
-        <p>You have no favorite ads.</p>
+        <p class="no-favorites">You have no favorite ads.</p>
     {% endif %}
+</div>
 {% endblock %}

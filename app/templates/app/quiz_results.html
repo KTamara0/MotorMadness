@@ -4,24 +4,42 @@
 
 {% block title %}Quiz Results{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'app/quiz_results.css' %}">
+{% endblock %}
+
 {% block content %}
-    <h2>Recommended Motorcycles for You</h2>
+
+<div class="title-wrapper">
+    <div class="animated-icon-wrapper">
+        <img src="{% static 'images/motorbike.png' %}" alt="Motor Icon" class="moving-icon">
+    </div>
+
+    <h2 class="results-title">Here are some motorcycles that match your style!</h2>
+</div>
 
     {% if recommended_motors %}
-    <ul>
-        {% for ad in recommended_motors %}
-            <li>
-                <a href="{% url 'app:ad_detail' ad.id %}">
-                    {{ ad.motor.brand }} {{ ad.motor.model }} - {{ ad.motor.price }} €
-                </a><br>
-                Year: {{ ad.motor.made_at }} |
-                Mileage: {{ ad.motor.mileage }} km |
-                Condition: {{ ad.motor.condition }}
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No motorcycles match your preferences at the moment.</p>
-{% endif %}
+        <div class="results-container">
+            {% for ad in recommended_motors %}
+                <div class="result-card">
+                    <a href="{% url 'app:ad_detail' ad.id %}">
+                        <img src="{{ ad.motor.image.url }}" alt="{{ ad.motor.model }}" class="result-image">
+                        <div class="result-info">
+                            <h3 class="result-title">{{ ad.motor.brand }} {{ ad.motor.model }}</h3>
+                            <p class="result-price">{{ ad.motor.price }} €</p>
+                            <p class="result-details">
+                                Year: {{ ad.motor.made_at }}<br>
+                                Mileage: {{ ad.motor.mileage }} km<br>
+                                Condition: {{ ad.motor.condition }}
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-results">No motorcycles match your preferences at the moment.</p>
+    {% endif %}
+
 
 {% endblock %}

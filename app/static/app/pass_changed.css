@@ -1,0 +1,45 @@
+
+
+body {
+    background-color: #f4f7fae4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.pass-changed-container {
+    max-width: 500px;
+    margin: 80px auto;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.pass-changed-title {
+    font-size: 26px;
+    color: #28a745;
+    margin-bottom: 20px;
+}
+
+.pass-changed-message {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.pass-changed-button {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.pass-changed-button:hover {
+    background-color: #0056b3;
+}

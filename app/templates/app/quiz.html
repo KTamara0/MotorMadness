@@ -2,44 +2,65 @@
 
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'app/quiz.css' %}">
+{% endblock %}
+
 {% block title %}Quiz{% endblock %}
 
 {% block content %}
-<form method="POST" action="{% url 'app:quiz_results' %}">
+
+
+<form method="POST" action="{% url 'app:quiz_results' %}" class="quiz-form">
     {% csrf_token %}
 
-    <h3>1. What type of rider are you?</h3>
-    <label><input type="radio" name="driving_style" value="beginner" required> Beginner</label>
-    <label><input type="radio" name="driving_style" value="experienced"> Experienced</label>
-    <label><input type="radio" name="driving_style" value="adventurer"> Adventurous</label>
+     <h2 class="quiz-header">
+        <img src="{% static 'images/motorbike.png' %}" alt="Motor Icon" class="icon">
+        Discover your ideal motorcycle with this quick quiz!
+    </h2>
 
-    <h3>2. What's your budget?</h3>
-    <label><input type="radio" name="budget" value="low" required> Less than €2000</label>
-    <label><input type="radio" name="budget" value="mid"> €2000 – €5000</label>
-    <label><input type="radio" name="budget" value="high"> More than €5000</label>
+    <div class="quiz-question">
+        <h3 class="quiz-title">1. What type of rider are you?</h3>
+        <label class="quiz-option"><input type="radio" name="driving_style" value="beginner" required> Beginner</label>
+        <label class="quiz-option"><input type="radio" name="driving_style" value="experienced"> Experienced</label>
+        <label class="quiz-option"><input type="radio" name="driving_style" value="adventurer"> Adventurous</label>
+    </div>
 
-    <h3>3. Do you prefer newer or older bikes?</h3>
-    <label><input type="radio" name="age_pref" value="new" required> Newer</label>
-    <label><input type="radio" name="age_pref" value="any"> Doesn't matter</label>
-    <label><input type="radio" name="age_pref" value="old"> Older</label>
+    <div class="quiz-question">
+        <h3 class="quiz-title">2. What's your budget?</h3>
+        <label class="quiz-option"><input type="radio" name="budget" value="low" required> Less than €5000</label>
+        <label class="quiz-option"><input type="radio" name="budget" value="mid"> €5000 – €10000</label>
+        <label class="quiz-option"><input type="radio" name="budget" value="high"> More than €10000</label>
+    </div>
 
-    <h3>4. How much mileage is acceptable?</h3>
-    <label><input type="radio" name="mileage_pref" value="low" required> Less than 10,000 km</label>
-    <label><input type="radio" name="mileage_pref" value="medium"> Less than 30,000 km</label>
-    <label><input type="radio" name="mileage_pref" value="any"> Doesn't matter</label>
+    <div class="quiz-question">
+        <h3 class="quiz-title">3. Do you prefer newer or older bikes?</h3>
+        <label class="quiz-option"><input type="radio" name="age_pref" value="new" required> Newer</label>
+        <label class="quiz-option"><input type="radio" name="age_pref" value="any"> Doesn't matter</label>
+        <label class="quiz-option"><input type="radio" name="age_pref" value="old"> Older</label>
+    </div>
 
-    <h3>5. Which brand do you prefer?</h3>
-    <select name="brand" required>
-        <option value="any">Doesn't matter</option>
-        <option value="BMW">BMW</option>
-        <option value="Yamaha">Yamaha</option>
-        <option value="Honda">Honda</option>
-        <option value="Suzuki">Suzuki</option>
+    <div class="quiz-question">
+        <h3 class="quiz-title">4. How much mileage is acceptable?</h3>
+        <label class="quiz-option"><input type="radio" name="mileage_pref" value="low" required> Less than 10,000 km</label>
+        <label class="quiz-option"><input type="radio" name="mileage_pref" value="medium"> Less than 30,000 km</label>
+        <label class="quiz-option"><input type="radio" name="mileage_pref" value="any"> Doesn't matter</label>
+    </div>
 
-    </select>
+    <div class="quiz-question">
+        <h3 class="quiz-title">5. Which brand do you prefer?</h3>
+        <select name="brand" required class="quiz-select">
+            <option value="any">Doesn't matter</option>
+            <option value="BMW">BMW</option>
+            <option value="Yamaha">Yamaha</option>
+            <option value="Honda">Honda</option>
+            <option value="Suzuki">Suzuki</option>
+        </select>
+    </div>
 
-    <br><br>
-    <button type="submit">Show my recommendations</button>
+    <div class="quiz-submit">
+        <button type="submit" class="quiz-button">Show my recommendations</button>
+    </div>
 </form>
 
 {% endblock %}
