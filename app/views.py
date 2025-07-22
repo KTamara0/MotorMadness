@@ -122,7 +122,8 @@ def all_advertisements(request):
                 else:  # Možda kilometraža ili cijena
                     ads = ads.filter(
                         Q(motor__mileage__lte=term) |
-                        Q(motor__price__lte=term)
+                        Q(motor__price__lte=term) |
+                        Q(motor__power__lte=term)
                     )
             elif term in condition_keywords:
                 condition_filters |= Q(motor__condition__icontains=term)
