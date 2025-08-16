@@ -79,7 +79,6 @@ class AdvertisementForm(ModelForm):
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         if user:
-            # Include user=None motors during migration transition
             self.fields['motor'].queryset = Motor.objects.filter(user__in=[user, None])
         
 
@@ -97,14 +96,14 @@ class MotorForm(ModelForm):
             'power': forms.NumberInput(attrs={'class' : 'form-control', 'placeholder' : 'e.g., 50'}),
             'made_at': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 2015'}),
             'mileage': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 50000'}),
-            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
         labels = {
             'name': 'Vehicle Name',
             'brand': 'Brand',
             'model': 'Model',
             'description': 'Description',
-            'price': 'Price (USD)',
+            'price': 'Price (EUR)',
             'power': 'Power (HP)',
             'made_at': 'Year Manufactured',
             'mileage': 'Mileage',

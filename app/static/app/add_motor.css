@@ -10,7 +10,7 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed; /* Drži sliku zalijepljenu pri skrolanju */
+    background-attachment: fixed; 
     color: #ffffff;
     text-align: center;
 }
@@ -26,7 +26,7 @@
     align-items: center;
     width: 100%;
     max-width: 450px;
-    background-color: rgba(0, 0, 0, 0.6); /* Bolji kontrast */
+    background-color: rgba(0, 0, 0, 0.6); 
     padding: 20px 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);

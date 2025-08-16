@@ -1,4 +1,3 @@
-
 .navbar {
     position: sticky;
     top: 0;
@@ -8,9 +7,6 @@
     z-index: 1000;
 }
 
-
-
-/* Centriranje ul kroz pozicioniranje */
 .navlinks {
     position: relative;
     list-style: none;
@@ -22,7 +18,6 @@
     padding: 0;
 }
 
-/* Linkovi */
 .navlinks li a {
     color: white;
     text-decoration: none;
@@ -36,7 +31,6 @@
 .navlinks li a.active {
     color: #64b5f4;
 }
-
 
 
 @media (max-width: 768px) {
@@ -59,10 +53,6 @@
 }
 
 
-
-/* Omot za home koji zauzima cijeli ekran */
-
-/* Glavni sadržaj centriran unutar wrappera */
 
 html, body {
     height: 100%;
@@ -96,39 +86,34 @@ body{
     overflow: hidden;
 }
 
-
-
 .title {
     font-size: 4rem; 
     color: #64b5f4; 
     margin: 0; 
 }
 
-
 .image-row {
-    display: flex; /* Postavlja slike u red */
-    justify-content: center; /* Centriranje slika unutar reda */
-    gap: 20px; /* Razmak između slika */
-    margin-top: 20px; /* Razmak između naslova i slika */
+    display: flex; 
+    justify-content: center; 
+    gap: 20px; 
+    margin-top: 20px; 
     flex-wrap: wrap;
 }
 
-
-
 .image {
-    width: 100px; /* Postavlja širinu slike */
-    height: 100px; /* Postavlja visinu slike */
-    object-fit: cover; /* Osigurava da slike ne deformiraju proporcije */
-    border-radius: 8px; /* Zaobljeni rubovi slika */
-    margin: 0 5px; /* Dodavanje razmaka između slika */
-    border: 5px solid #000; /* Crni obrub oko slika */
-    transition: all 0.3s ease-in-out; /* Glatke promjene prilikom hover efekta */
+    width: 100px; 
+    height: 100px; 
+    object-fit: cover; 
+    border-radius: 8px; 
+    margin: 0 5px; 
+    border: 5px solid #000; 
+    transition: all 0.3s ease-in-out; 
 }
 
 .image:hover {
-    filter: grayscale(0%); /* Boje se vraćaju na normalne prilikom hovera */
-    transform: scale(1.1); /* Povećanje slike pri hoveru */
-    border: 5px solid  #64b5f4; /* Bijeli obrub na hoveru */
+    filter: grayscale(0%); 
+    transform: scale(1.1); 
+    border: 5px solid  #64b5f4; 
 }
 
 .quote{
@@ -138,28 +123,26 @@ body{
 }
 
 
-/* Stil za login-container div koji sadrži naslov i formu */
+
 .login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;  /* Pokriva cijeli visoki ekran */
+    min-height: 100vh;  
     background-image: 
         linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
         url("/static/images/log.jpg");
-    background-size: cover;  /* Slika će pokriti cijeli prostor */
-    background-position: center;  /* Slika će biti centrirana */
+    background-size: cover;  
+    background-position: center;  
     color: #64b5f4;  
-    text-align: center;  /* Naslov i forma bit će centrirani */
+    text-align: center;  
 }
-
 
 .login-container h1 {
     font-size: 36px;
     margin-bottom: 20px;
 }
-
 
 .login-container form {
     display: flex;
@@ -172,7 +155,6 @@ body{
     padding: 20px;
     border-radius: 8px;
 }
-
 
 .login-container button {
     background-color: #424241;
@@ -207,43 +189,38 @@ body{
     color: rgb(52, 74, 240);
 }
 
-
-
 .register-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;  /* Pokriva cijeli visoki ekran */
+    min-height: 100vh;  
     background-image: 
         linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
         url("/static/images/log.jpg");
-    background-size: cover;  /* Slika će pokriti cijeli prostor */
-    background-position: center;  /* Slika će biti centrirana */
-    color: #64b5f4;  /* Tekst će biti bijele boje */
-    text-align: center;  /* Naslov i forma bit će centrirani */
+    background-size: cover;  
+    background-position: center;  
+    color: #64b5f4;  
+    text-align: center;  
 }
 
-/* Stil za naslov */
 .register-container h1 {
     font-size: 36px;
     margin-bottom: 20px;
 }
 
-/* Stil za formu */
 .register-container form {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 400px;  /* Maksimalna širina forme */
-    background-color: rgba(0, 0, 0, 0.5);  /* Poluprozirna pozadina forme */
+    max-width: 400px;  
+    background-color: rgba(0, 0, 0, 0.5); 
     padding: 20px;
     border-radius: 8px;
 }
 
-/* Stil za dugme */
 .register-container button {
     background-color: #424241;
     color: #64b5f4;

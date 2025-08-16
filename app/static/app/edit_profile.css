@@ -21,7 +21,6 @@ body {
   color: #333;
 }
 
-/* Styling Django form fields */
 .edit-profile-form p {
   margin-bottom: 20px;
 }
@@ -43,7 +42,6 @@ body {
   font-size: 1rem;
 }
 
-/* Button group styling */
 .button-group {
   display: flex;
   justify-content: space-between;
@@ -65,7 +63,6 @@ body {
   width: 48%;
 }
 
-/* Save button */
 .btn.save {
   background-color: #8bb3ea;
 }
@@ -73,7 +70,6 @@ body {
   background-color: #417eb0;
 }
 
-/* Cancel button */
 .btn.cancel {
   background-color: #6c757d;
 }

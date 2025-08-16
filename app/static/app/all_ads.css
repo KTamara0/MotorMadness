@@ -1,18 +1,16 @@
 body {
-    background-color: #f2f2f2e5; /* svijetlo siva */
+    background-color: #f2f2f2e5; 
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     min-height: 100vh;
 }
 
-/* Glavni naslov */
 h2 {
     text-align: center;
     margin-bottom: 20px;
 }
 
-/* Pretraga */
 .main-search-form {
     display: flex;
     justify-content: center;
@@ -40,7 +38,6 @@ h2 {
     background-color: #0056b3;
 }
 
-/* Forma za filtriranje */
 .filter-form {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -75,11 +72,10 @@ h2 {
     width: 100%;
 }
 
-/* Gumb za pretragu */
 .filter-form button {
     grid-column: 1 / -1;
-    justify-self: center;        /* Centrira gumb */
-    width: fit-content;          /* Širina prema sadržaju */
+    justify-self: center;        
+    width: fit-content;         
     padding: 8px 20px;
     font-size: 15px;
     background-color: #007bff;
@@ -152,8 +148,6 @@ h2 {
   margin: 10px 0;
 }
 
-
-/* zajednički stil za cijenu, godinu, kilometražu i snagu */
 .price-slider-container,
 .year-slider-container,
 .mileage-slider-container,
@@ -225,7 +219,7 @@ h2 {
 }
 
 .filter-submit-btn {
-  grid-column: auto; /* NE širi se preko cijelog reda */
+  grid-column: auto; 
   width: fit-content;
   align-self: center;
   padding: 8px 20px;

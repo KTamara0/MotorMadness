@@ -16,7 +16,6 @@
 </form>
 
 <form method="GET" class="filter-form">
-    <!-- Dropdown za marku -->
      <div class="filter-item">
         <label for="brand">Brand:</label>
         <select id="brand" name="brand">
@@ -26,7 +25,6 @@
             {% endfor %}
         </select>
      </div>
-    <!-- Dropdown za model -->
     <div class="filter-item">
         <label for="model">Model:</label>
         <select id="model" name="model">
@@ -37,32 +35,30 @@
         </select>
     </div>
         
-<div class="price-slider-container">
-  <label>Price range (€)</label>
+    <div class="price-slider-container">
+        <label>Price range (€)</label>
 
-  <div class="number-inputs">
-    <input type="number" id="min_price_input" min="0" max="50000" step="500" 
-        value="{{ request.GET.min_price|default:'0' }}">
-    <input type="number" id="max_price_input" min="0" max="50000" step="500" 
-        value="{{ request.GET.max_price|default:'50000' }}">
-  </div>
+        <div class="number-inputs">
+            <input type="number" id="min_price_input" min="0" max="70000" step="500" 
+                value="{{ request.GET.min_price|default:'0' }}">
+            <input type="number" id="max_price_input" min="0" max="70000" step="500" 
+                value="{{ request.GET.max_price|default:'70000' }}">
+        </div>
 
-  <div class="sliders">
-    <input type="range" id="price-min" min="0" max="50000" step="500" 
-        value="{{ request.GET.min_price|default:'0' }}">
-    <input type="range" id="price-max" min="0" max="50000" step="500" 
-        value="{{ request.GET.max_price|default:'50000' }}">
-  </div>
+        <div class="sliders">
+            <input type="range" id="price-min" min="0" max="70000" step="500" 
+                value="{{ request.GET.min_price|default:'0' }}">
+            <input type="range" id="price-max" min="0" max="70000" step="500" 
+                value="{{ request.GET.max_price|default:'70000' }}">
+        </div>
 
-  <!-- Hidden inputi za formu -->
-  <input type="hidden" id="min_price_hidden" name="min_price"
-         value="{{ request.GET.min_price|default:'0' }}">
-  <input type="hidden" id="max_price_hidden" name="max_price"
-         value="{{ request.GET.max_price|default:'50000' }}">
-</div>
+        <input type="hidden" id="min_price_hidden" name="min_price"
+                value="{{ request.GET.min_price|default:'0' }}">
+        <input type="hidden" id="max_price_hidden" name="max_price"
+                value="{{ request.GET.max_price|default:'70000' }}">
+    </div>
 
 
- <!-- Range slider za godinu proizvodnje -->
 <div class="year-slider-container">
    <label for="yearRange">Year range</label>
 
@@ -80,13 +76,11 @@
         value="{{ request.GET.max_year|default:now.year }}">
   </div>
 
-  <!-- Hidden inputi za formu -->
   <input type="hidden" id="min_year_hidden" name="min_year" value="{{ request.GET.min_year|default:'1900' }}">
   <input type="hidden" id="max_year_hidden" name="max_year" value="{{ request.GET.max_year|default:now.year }}">
 </div>
 
 
-    <!-- Range slider za kilometražu -->
 <div class="mileage-slider-container">
   <label>Mileage range (km)</label>
 
@@ -104,13 +98,11 @@
         value="{{ request.GET.max_mileage|default:'200000' }}">
   </div>
 
-  <!-- Hidden inputi za formu -->
   <input type="hidden" id="min_mileage_hidden" name="min_mileage" value="{{ request.GET.min_mileage|default:'0' }}">
   <input type="hidden" id="max_mileage_hidden" name="max_mileage" value="{{ request.GET.max_mileage|default:'200000' }}">
 </div>
 
 
-    <!-- Range slider za snagu motora -->
 <div class="power-slider-container">
   <label>Power range (HP)</label>
 
@@ -128,12 +120,10 @@
         value="{{ request.GET.max_power|default:'300' }}">
   </div>
 
-  <!-- Hidden inputi za formu -->
   <input type="hidden" id="min_power_hidden" name="min_power" value="{{ request.GET.min_power|default:'0' }}">
   <input type="hidden" id="max_power_hidden" name="max_power" value="{{ request.GET.max_power|default:'300' }}">
 </div>
 
-    <!-- Dropdown za lokaciju -->
      <div class="filter-item">
         <label for="location">Location:</label>
         <select id="location" name="location">
@@ -162,7 +152,6 @@
 
 <hr>
 
-<!-- Ispis oglasa -->
 <div class="ads-list">
         {% for ad in ads %}
            <div class="ad-item">
@@ -183,88 +172,80 @@
 
 
 <script>
-function initializeRangeSliders(minInputId, maxInputId, minSliderId, maxSliderId, minHiddenId, maxHiddenId, defaultMin, defaultMax) {
-  const minInput = document.getElementById(minInputId);
-  const maxInput = document.getElementById(maxInputId);
-  const minSlider = document.getElementById(minSliderId);
-  const maxSlider = document.getElementById(maxSliderId);
-  const minHidden = document.getElementById(minHiddenId);
-  const maxHidden = document.getElementById(maxHiddenId);
+    function initializeRangeSliders(minInputId, maxInputId, minSliderId, maxSliderId, minHiddenId, maxHiddenId, defaultMin, defaultMax) {
+        const minInput = document.getElementById(minInputId);
+        const maxInput = document.getElementById(maxInputId);
+        const minSlider = document.getElementById(minSliderId);
+        const maxSlider = document.getElementById(maxSliderId);
+        const minHidden = document.getElementById(minHiddenId);
+        const maxHidden = document.getElementById(maxHiddenId);
 
-  // Postavi početne vrijednosti (uz default ako nema GET)
-  const minVal = parseInt(minInput.value) || defaultMin;
-  const maxVal = parseInt(maxInput.value) || defaultMax;
+        const minVal = parseInt(minInput.value) || defaultMin;
+        const maxVal = parseInt(maxInput.value) || defaultMax;
 
-  minSlider.value = minVal;
-  maxSlider.value = maxVal;
-  minInput.value = minVal;
-  maxInput.value = maxVal;
-  minHidden.value = minVal;
-  maxHidden.value = maxVal;
+        minSlider.value = minVal;
+        maxSlider.value = maxVal;
+        minInput.value = minVal;
+        maxInput.value = maxVal;
+        minHidden.value = minVal;
+        maxHidden.value = maxVal;
 
-  function syncSliders() {
-    let minV = parseInt(minSlider.value);
-    let maxV = parseInt(maxSlider.value);
-    if (minV > maxV) {
-      minV = maxV;
-      minSlider.value = maxV;
-      minInput.value = maxV;
+    function syncSliders() {
+        let minV = parseInt(minSlider.value);
+        let maxV = parseInt(maxSlider.value);
+        if (minV > maxV) {
+        minV = maxV;
+        minSlider.value = maxV;
+        minInput.value = maxV;
+        }
+        minInput.value = minV;
+        maxInput.value = maxV;
+        minHidden.value = minV;
+        maxHidden.value = maxV;
     }
-    minInput.value = minV;
-    maxInput.value = maxV;
-    minHidden.value = minV;
-    maxHidden.value = maxV;
-  }
 
-  function syncInputs() {
-    let minV = parseInt(minInput.value);
-    let maxV = parseInt(maxInput.value);
-    if (minV > maxV) {
-      minV = maxV;
-      minInput.value = maxV;
+    function syncInputs() {
+        let minV = parseInt(minInput.value);
+        let maxV = parseInt(maxInput.value);
+        if (minV > maxV) {
+        minV = maxV;
+        minInput.value = maxV;
+        }
+        minSlider.value = minV;
+        maxSlider.value = maxV;
+        minHidden.value = minV;
+        maxHidden.value = maxV;
     }
-    minSlider.value = minV;
-    maxSlider.value = maxV;
-    minHidden.value = minV;
-    maxHidden.value = maxV;
-  }
 
-  minSlider.addEventListener('input', syncSliders);
-  maxSlider.addEventListener('input', syncSliders);
-  minInput.addEventListener('input', syncInputs);
-  maxInput.addEventListener('input', syncInputs);
-}
+    minSlider.addEventListener('input', syncSliders);
+    maxSlider.addEventListener('input', syncSliders);
+    minInput.addEventListener('input', syncInputs);
+    maxInput.addEventListener('input', syncInputs);
+    }
 
-// Inicijaliziraj sve tri
-initializeRangeSliders('min_price_input', 'max_price_input', 'price-min', 'price-max', 'min_price_hidden', 'max_price_hidden', 0, 50000);
-initializeRangeSliders('min_year_input', 'max_year_input', 'year-min', 'year-max', 'min_year_hidden', 'max_year_hidden', 1900, new Date().getFullYear());
-initializeRangeSliders('min_mileage_input', 'max_mileage_input', 'mileage-min', 'mileage-max', 'min_mileage_hidden', 'max_mileage_hidden', 0, 200000);
-initializeRangeSliders('min_power_input', 'max_power_input', 'power-min', 'power-max', 'min_power_hidden', 'max_power_hidden', 0, 300);
+    initializeRangeSliders('min_price_input', 'max_price_input', 'price-min', 'price-max', 'min_price_hidden', 'max_price_hidden', 0, 50000);
+    initializeRangeSliders('min_year_input', 'max_year_input', 'year-min', 'year-max', 'min_year_hidden', 'max_year_hidden', 1900, new Date().getFullYear());
+    initializeRangeSliders('min_mileage_input', 'max_mileage_input', 'mileage-min', 'mileage-max', 'min_mileage_hidden', 'max_mileage_hidden', 0, 200000);
+    initializeRangeSliders('min_power_input', 'max_power_input', 'power-min', 'power-max', 'min_power_hidden', 'max_power_hidden', 0, 300);
 
+    initializePriceSliders();
 
+    function updateValue(sliderId, displayId) {
+        const slider = document.getElementById(sliderId);
+        const display = document.getElementById(displayId);
+        display.textContent = slider.value;
 
-  // Pokreni inicijalizaciju odmah po učitavanju stranice
-  initializePriceSliders();
+        slider.addEventListener('input', () => {
+            display.textContent = slider.value;
+        });
+    }
 
-
-
-// Funkcija za prikaz vrijednosti na drugim sliderima (godina, mileage itd.)
-function updateValue(sliderId, displayId) {
-  const slider = document.getElementById(sliderId);
-  const display = document.getElementById(displayId);
-  display.textContent = slider.value;
-
-  slider.addEventListener('input', () => {
-    display.textContent = slider.value;
-  });
-}
-
-updateValue('min_year', 'minYearVal');
-updateValue('max_year', 'maxYearVal');
-updateValue('min_mileage', 'minMileageVal');
-updateValue('max_mileage', 'maxMileageVal');
-updateValue('min_power', 'minPowerVal');
-updateValue('max_power', 'maxPowerVal');
+    updateValue('min_year', 'minYearVal');
+    updateValue('max_year', 'maxYearVal');
+    updateValue('min_mileage', 'minMileageVal');
+    updateValue('max_mileage', 'maxMileageVal');
+    updateValue('min_power', 'minPowerVal');
+    updateValue('max_power', 'maxPowerVal');
 
 
 

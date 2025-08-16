@@ -69,11 +69,9 @@ def add_advertisement(request):
         if form.is_valid():
             advertisement = form.save(commit=False)
             motor = form.cleaned_data['motor']
-            # Assign user to motor if None
             if motor.user is None:
                 motor.user = request.user
                 motor.save()
-            # Verify ownership
             elif motor.user != request.user:
                 return HttpResponse("You can only advertise your own motors.", status=403)
             advertisement.user = request.user
@@ -88,7 +86,6 @@ def add_advertisement(request):
 
 @login_required
 def add_motor(request):
-
     if request.method == 'POST':
         form = MotorForm(request.POST, request.FILES)
         print("POST request, form is valid:", form.is_valid())
@@ -117,9 +114,9 @@ def all_advertisements(request):
         condition_filters = Q()
         for term in terms:
             if term.isdigit():
-                if len(term) == 4:  # Pretpostavi godina
+                if len(term) == 4:  
                     ads = ads.filter(motor__made_at=term)
-                else:  # Možda kilometraža ili cijena
+                else:  
                     ads = ads.filter(
                         Q(motor__mileage__lte=term) |
                         Q(motor__price__lte=term) |
@@ -139,7 +136,6 @@ def all_advertisements(request):
         if condition_filters:
             ads = ads.filter(condition_filters)
 
-    # Filteri iz GET parametara
     brand = request.GET.get('brand')
     model = request.GET.get('model')
     min_price = request.GET.get('min_price')
@@ -182,7 +178,6 @@ def all_advertisements(request):
     if request.user.is_authenticated:
         favorites = request.user.favorite_ads.values_list('id', flat=True)
 
-     # Podaci za dropdown liste
     brands = Motor.objects.values_list('brand', flat=True).distinct()
     models = Motor.objects.values_list('model', flat=True).distinct()
     locations = CustomUser.objects.values_list('location', flat=True).distinct()
@@ -202,7 +197,6 @@ def all_advertisements(request):
 def toggle_favorite(request, ad_id):
     ad = get_object_or_404(Advertisement, id=ad_id)
 
-    # Provjera: korisnik ne može dodati svoj oglas u favorite
     if ad.user == request.user:
         messages.warning(request, "You cannot add your own ad to favorites.")
         return redirect('app:ad_detail', ad_id=ad_id)
@@ -226,7 +220,7 @@ def favorite_ads_view(request):
 @login_required
 def ad_detail(request, ad_id):
     ad = get_object_or_404(Advertisement, id=ad_id)
-    motor = ad.motor  # Dohvati povezani motor
+    motor = ad.motor  
 
     is_favorite = False
     if request.user.is_authenticated:
@@ -298,12 +292,11 @@ class MyPasswordChangeView(auth_views.PasswordChangeView):
 class MyPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
     template_name = 'app/password_change_done.html'
 
-
+@login_required
 def quiz_view(request):
     return render(request, 'app/quiz.html')
 
-from django.utils import timezone
-
+@login_required
 def quiz_results(request):
     if request.method == 'POST':
         driving_style = request.POST.get('driving_style')
@@ -321,7 +314,6 @@ def quiz_results(request):
             motor = ad.motor
             score = 0
 
-            # Provjera driving_style (primjer, možeš prilagoditi)
             if driving_style == 'beginner':
                 if motor.condition in ['new', 'excellent'] and motor.price <= 5000:
                     score += 1
@@ -332,7 +324,6 @@ def quiz_results(request):
                 if 5000 <= motor.price <= 15000:
                     score += 1
 
-            # Provjera budžeta
             if budget == 'low' and motor.price <= 5000:
                 score += 1
             elif budget == 'mid' and 5000 <= motor.price <= 10000:
@@ -340,7 +331,6 @@ def quiz_results(request):
             elif budget == 'high' and motor.price >= 10000:
                 score += 1
 
-            # Provjera dobi motora
             motor_age = current_year - motor.made_at
             if age_pref == 'new' and motor.made_at >= current_year - 3:
                 score += 1
@@ -349,7 +339,6 @@ def quiz_results(request):
             elif age_pref == 'any':
                 score += 1
 
-            # Provjera kilometraže
             if mileage_pref == 'low' and motor.mileage <= 10000:
                 score += 1
             elif mileage_pref == 'medium' and motor.mileage <= 30000:
@@ -357,11 +346,9 @@ def quiz_results(request):
             elif mileage_pref == 'any':
                 score += 1
 
-            # Provjera marke
             if brand == 'any' or motor.brand.lower() == brand.lower():
                 score += 1
 
-            # Ako je score 3 ili više, dodaj u preporuke
             if score >= 4:
                 recommended_ads.append(ad)
 
