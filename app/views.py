@@ -130,6 +130,7 @@ def all_advertisements(request):
                     Q(motor__model__icontains=term) |
                     Q(motor__name__icontains=term) |
                     Q(motor__description__icontains=term) |
+                    Q(description__icontains=term) | 
                     Q(motor__condition__icontains=term) |
                     Q(user__location__icontains=term)
                 )
