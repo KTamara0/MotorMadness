@@ -23,6 +23,7 @@ h2 {
     max-width: 400px;
     border: 1px solid #ccc;
     border-radius: 8px 0 0 8px;
+    font-style: italic;
 }
 
 .main-search-form button {
@@ -32,6 +33,7 @@ h2 {
     color: white;
     border-radius: 0 8px 8px 0;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .main-search-form button:hover {
@@ -70,6 +72,14 @@ h2 {
 .filter-form select,
 .filter-form input[type="range"] {
     width: 100%;
+}
+
+.filter-item select {
+    width: 100%;
+    border-radius: 8px; 
+    padding: 6px;      
+    border: 1px solid #ccc; 
+    color: #020202;
 }
 
 .filter-form button {
@@ -181,27 +191,32 @@ h2 {
   appearance: none;
   background: #ccc;
   border-radius: 5px;
-  pointer-events: none;
+  pointer-events: all;
 }
 
 .sliders input[type="range"]::-webkit-slider-thumb {
   appearance: none;
   height: 16px;
   width: 16px;
-  background: #007bff;
+  background: #4e9ff6;
   border-radius: 50%;
   cursor: pointer;
   pointer-events: auto;
   margin-top: -5px;
+  z-index: 2;
+  position: relative;
 }
 
 .sliders input[type="range"]::-moz-range-thumb {
   height: 16px;
   width: 16px;
-  background: #007bff;
+  background: #4e9ff6;
   border-radius: 50%;
   cursor: pointer;
   pointer-events: auto;
+  z-index: 2;
+  position: relative;
+  margin-top: 0;
 }
 
 .number-inputs {

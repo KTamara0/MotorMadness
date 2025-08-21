@@ -179,9 +179,9 @@ def all_advertisements(request):
     if request.user.is_authenticated:
         favorites = request.user.favorite_ads.values_list('id', flat=True)
 
-    brands = Motor.objects.values_list('brand', flat=True).distinct()
-    models = Motor.objects.values_list('model', flat=True).distinct()
-    locations = CustomUser.objects.values_list('location', flat=True).distinct()
+    brands = Motor.objects.values_list('brand', flat=True).distinct().order_by('brand')
+    models = Motor.objects.values_list('model', flat=True).distinct().order_by('model')
+    locations = CustomUser.objects.values_list('location', flat=True).distinct().order_by('location')
 
     return render(request, 'app/all_ads.html', {
         'ads': ads,
@@ -295,7 +295,8 @@ class MyPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
 
 @login_required
 def quiz_view(request):
-    return render(request, 'app/quiz.html')
+    brands = Motor.objects.values_list('brand', flat=True).distinct().order_by('brand')
+    return render(request, 'app/quiz.html', {'brands': brands})
 
 @login_required
 def quiz_results(request):

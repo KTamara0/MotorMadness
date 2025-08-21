@@ -51,10 +51,9 @@
         <h3 class="quiz-title">5. Which brand do you prefer?</h3>
         <select name="brand" required class="quiz-select">
             <option value="any">Doesn't matter</option>
-            <option value="BMW">BMW</option>
-            <option value="Yamaha">Yamaha</option>
-            <option value="Honda">Honda</option>
-            <option value="Suzuki">Suzuki</option>
+            {% for b in brands %}
+                <option value="{{ b }}">{{ b }}</option>
+            {% endfor %}
         </select>
     </div>
 
